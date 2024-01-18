@@ -1,3 +1,3 @@
 import os
 
-print("i'm so publirjkttmkc S D G2")
+print("This is how we party")
