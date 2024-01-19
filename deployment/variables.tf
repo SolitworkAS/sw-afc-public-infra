@@ -44,7 +44,7 @@ variable "esg_version" {
 
 variable "vat_version" {
   description = "version of esg to deploy"
-  default = "1.1.5"
+  default = "1.1.9"
 }
 # CONTAINER REGISTRY VARIABLES
 variable "container_registry" {
