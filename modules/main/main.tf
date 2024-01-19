@@ -144,6 +144,11 @@ module "vat" {
   depends_on = [module.environment]
 }
 
+resource "time_sleep" "wait_30_seconds" {
+  depends_on = [module.environment]
+  create_duration = "30s"
+}
+
 module "realm" {
   source = "../realm"
 
@@ -170,6 +175,8 @@ module "realm" {
   keycloak_admin_password    = var.keycloak_admin_password
   keycloak_admin_user        = var.keycloak_admin_user
   reportingpassword = var.reportingpassword
+
+  depends_on = [time_sleep.wait_30_seconds]
 }
 
 
