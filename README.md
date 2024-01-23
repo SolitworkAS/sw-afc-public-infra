@@ -1,14 +1,12 @@
-# sw-afc-public-infra
-
 # 1. Deployment
 
 ## 1.1 Pre-requisites
 
 Ensure you have the following pre-requisites in place:
 
-- An Azure container registry containing the necessary applications.
 - Azure credentials, including a username and password for the container registry.
-- Values for credentials, such as the initial user, database password, application version to deploy, and SMTP values for user management (refer to `terraform.tfvars`).
+- Values for credentials, such as the initial user, database password, application version to deploy, and SMTP values for user management.
+- An Azure Tenant
 
 ## 1.2 Requirements
 
@@ -16,8 +14,7 @@ Before proceeding, make sure you have the following tools installed:
 
 1. Install the official [Terraform](https://www.terraform.io/) CLI. Preferably, install it on a Linux environment.
 2. Install the [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli), also preferably on a Linux system.
-
-Additionally, you need Git installed on your machine.
+3. Ensure Git is installed on your machine.
 
 ## 1.3 Instructions
 
@@ -25,15 +22,7 @@ Follow these steps to deploy the infrastructure:
 
 1. Access the terminal and navigate to the desired folder.
 
-2. Run the command to log in to your Azure tenant:
-
-    ```bash
-    az login
-    ```
-
-    This will open a browser to authenticate your Azure account.
-
-3. Clone the infrastructure repository using Git:
+2. Clone the infrastructure repository using Git:
 
     ```bash
     git clone https://github.com/SolitworkAS/sw-afc-public-infra
@@ -44,6 +33,10 @@ Follow these steps to deploy the infrastructure:
     ```bash
     cd sw-afc-public-infra
     ```
+
+3. **Fill out the `terraform.tfvars` file:**
+
+   Before initializing Terraform, open the `terraform.tfvars` file in the root of the project. Fill in the required values such as Azure credentials, initial user details, database password, application version, SMTP values, and any other necessary information.
 
 4. Initialize Terraform:
 
@@ -80,3 +73,5 @@ Follow these steps to deploy the infrastructure:
     Confirm with "yes" when prompted.
 
 8. After the deployment completes, you can access the deployed resources.
+
+By following these steps, you'll successfully deploy the infrastructure using Terraform, with the required values filled out in the `terraform.tfvars` file.
