@@ -35,8 +35,8 @@ Follow these steps to deploy the infrastructure:
     ```
 
 3. **Fill out the `terraform.tfvars` file:**
-   Add the file `sw-afc-public-infra/terraform.tfvars` to the directory. 
-   Add the following content to the file and fill out the variables.
+   Add the file `sw-afc-public-infra/terraform.tfvars` to the directory.  
+   Add the content below to the file and fillout **all** the variables.
 
 ```hcl
 # Customer Information
@@ -62,7 +62,7 @@ app_admin_initial_password  = ""
 app_admin_last_name         = ""
 
 # SMTP Configuration for Sending Signup Emails, Notifications, etc.
-smtp_from                   = "" # Email address for the sender's address. E.g. "noreply@yourdomain.com"
+smtp_from                   = "" # Email address for the sender. E.g. noreply@yourdomain.com
 smtp_host                   = "" # Host of the email service. E.g. smtp.serveraddress.com
 smtp_port                   = "" # Port for the identity provider email service
 smtp_username               = "" # Username. Often the same as smtp_from.
