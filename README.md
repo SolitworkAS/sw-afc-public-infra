@@ -2,7 +2,7 @@
 
 ## 1.1 Pre-requisites
 
-Before starting, ensure you have:
+Before starting, ensure you have: 
 
 - **Azure Access**: Credentials for the Azure Tenant and Subscription where the apps will be hosted.
 - **Container Registry Access**: Solitwork Azure Container Registry credentials (provided by Solitwork).
