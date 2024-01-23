@@ -35,6 +35,7 @@ Follow these steps to deploy the infrastructure:
     ```
 
 3. **Fill out the `terraform.tfvars` file:**
+   Add the file ""
 
    Before initializing Terraform, open the `terraform.tfvars` file in the root of the project. Fill in the required values such as Azure credentials, initial user details, database password, application version, SMTP values, and any other necessary information.
 
@@ -101,11 +102,11 @@ app_admin_initial_password  = ""
 app_admin_last_name         = ""
 
 # SMTP Configuration for Sending Signup Emails, Notifications, etc.
-smtp_from                   = ""
-smtp_host                   = ""
-smtp_port                   = ""
-smtp_username               = ""
-smtp_password               = ""
+smtp_from                   = "" # Email address for the sender's address. E.g. "noreply@yourdomain.com"
+smtp_host                   = "" # Host of the email service. E.g. smtp.serveraddress.com
+smtp_port                   = "" # Port for the identity provider email service
+smtp_username               = "" # Username. Often the same as smtp_from.
+smtp_password               = "" # Password for smtp_password. 
 
 # Product to deploy
 include_esg                 = false
