@@ -6,14 +6,14 @@ Ensure you have the following pre-requisites in place:
 
 - Azure credentials, including a username and password for the container registry.
 - Values for credentials, such as the initial user, database password, application version to deploy, and SMTP values for user management.
-- An Azure Tenant
+- An Azure Tenant and Subscription that should host the deployment.
 
 ## 1.2 Requirements
 
 Before proceeding, make sure you have the following tools installed:
 
-1. Install the official [Terraform](https://www.terraform.io/) CLI. Preferably, install it on a Linux environment.
-2. Install the [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli), also preferably on a Linux system.
+1. Install the official [Terraform](https://www.terraform.io/) CLI. 
+2. Install the [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli).
 3. Ensure Git is installed on your machine.
 
 ## 1.3 Instructions
