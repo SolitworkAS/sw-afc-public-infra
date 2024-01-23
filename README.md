@@ -34,7 +34,7 @@ Follow these steps to deploy the infrastructure:
     cd sw-afc-public-infra
     ```
 
-3. **Fill out the `terraform.tfvars` file:**
+3. **Fill out the `terraform.tfvars` file:**:  
    Add the file `sw-afc-public-infra/terraform.tfvars` to the directory.  
    Add the content below to the file and fillout **all** the variables.
 
