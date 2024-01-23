@@ -35,9 +35,44 @@ Follow these steps to deploy the infrastructure:
     ```
 
 3. **Fill out the `terraform.tfvars` file:**
-   Add the file ""
+   Add the file `sw-afc-public-infra/terraform.tfvars` to the directory. 
+   Add the following content to the file and fill out the variables.
 
-   Before initializing Terraform, open the `terraform.tfvars` file in the root of the project. Fill in the required values such as Azure credentials, initial user details, database password, application version, SMTP values, and any other necessary information.
+```hcl
+# Customer Information
+customer = ""  # Customer name or abbreviation
+
+# Container Registry Configuration (provided by Solitwork)
+container_registry          = ""
+container_registry_username = ""
+container_registry_password = ""
+
+# Internal Product Components Passwords
+rabbitmq_password           = ""
+keycloak_admin_password     = ""
+database_password           = ""
+
+# Reporting User Password
+reportingpassword           = ""
+
+# Initial Admin User Information for ESG Application
+app_admin_email             = ""
+app_admin_first_name        = ""
+app_admin_initial_password  = ""
+app_admin_last_name         = ""
+
+# SMTP Configuration for Sending Signup Emails, Notifications, etc.
+smtp_from                   = "" # Email address for the sender's address. E.g. "noreply@yourdomain.com"
+smtp_host                   = "" # Host of the email service. E.g. smtp.serveraddress.com
+smtp_port                   = "" # Port for the identity provider email service
+smtp_username               = "" # Username. Often the same as smtp_from.
+smtp_password               = "" # Password for smtp_password. 
+
+# Product to deploy
+include_esg                 = false
+include_carbacc             = false
+include_vat                 = false
+```
 
 4. Initialize Terraform:
 
@@ -74,42 +109,3 @@ Follow these steps to deploy the infrastructure:
     Confirm with "yes" when prompted.
 
 8. After the deployment completes, you can access the deployed resources.
-
-# Appendix
-
-`terraform.tfvars`
-```hcl
-# Customer Information
-customer = ""  # Customer name or abbreviation
-
-# Container Registry Configuration (provided by Solitwork)
-container_registry          = ""
-container_registry_username = ""
-container_registry_password = ""
-
-# Internal Product Components Passwords
-rabbitmq_password           = ""
-keycloak_admin_password     = ""
-database_password           = ""
-
-# Reporting User Password
-reportingpassword           = ""
-
-# Initial Admin User Information for ESG Application
-app_admin_email             = ""
-app_admin_first_name        = ""
-app_admin_initial_password  = ""
-app_admin_last_name         = ""
-
-# SMTP Configuration for Sending Signup Emails, Notifications, etc.
-smtp_from                   = "" # Email address for the sender's address. E.g. "noreply@yourdomain.com"
-smtp_host                   = "" # Host of the email service. E.g. smtp.serveraddress.com
-smtp_port                   = "" # Port for the identity provider email service
-smtp_username               = "" # Username. Often the same as smtp_from.
-smtp_password               = "" # Password for smtp_password. 
-
-# Product to deploy
-include_esg                 = false
-include_carbacc             = false
-include_vat                 = false
-```
