@@ -2,11 +2,27 @@
 
 ## 1.1 Pre-requisites
 
-Ensure you have the following pre-requisites in place:
 
-- Azure credentials, including a username and password for the container registry.
-- Values for credentials, such as the initial user, database password, application version to deploy, and SMTP values for user management.
-- An Azure Tenant and Subscription that should host the deployment.
+Certainly! A concise and easily understandable prerequisites section is crucial for clear communication. Here's a streamlined version of your prerequisites section:
+
+## 1.1 Pre-requisites
+
+Before starting, ensure you have:
+
+- **Azure Access**: Credentials for the Azure Tenant and Subscription where the apps will be hosted.
+- **Container Registry Access**: Solitwork Azure Container Registry credentials (provided by Solitwork).
+- **Secure Credentials**: Create strong passwords for:
+  - Reporting User
+  - Admin User
+  - Database User
+  - RabbitMQ User
+- **SMTP Configuration**:
+  - Email Address (e.g., noreply@yourdomain.com)
+  - Host (e.g., smtp.serveraddress.com)
+  - Port (Typically 25, 465, or 587)
+  - Username (Usually same as Email Address)
+  - Password (Password the User)
+
 
 ## 1.2 Requirements
 
@@ -16,7 +32,7 @@ Before proceeding, make sure you have the following tools installed:
 2. Install the [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli).
 3. Ensure Git is installed on your machine.
 
-## 1.3 Instructions
+## 1.3 Installing
 
 Follow these steps to deploy the infrastructure:
 
@@ -73,27 +89,7 @@ include_vat                 = false
     terraform init
     ```
 
-    If it's not the first time deploying, run:
-
-    ```bash
-    terraform init --upgrade
-    ```
-
-5. Run the following command to plan the deployment targeting the environment module:
-
-    ```bash
-    terraform plan -target="module.main.module.environment"
-    ```
-
-6. If the plan is successful, apply the changes:
-
-    ```bash
-    terraform apply -target="module.main.module.environment"
-    ```
-
-    The terminal will prompt you to confirm with "yes."
-
-7. Once the environment is deployed, run the final Terraform apply command:
+5. Run the following command to deploy:
 
     ```bash
     terraform apply
@@ -101,4 +97,28 @@ include_vat                 = false
 
     Confirm with "yes" when prompted.
 
-8. After the deployment completes, you can access the deployed resources.
+6. After the deployment completes, you can access the deployed resources.
+
+## 1.4 Updating
+
+Follow these steps to deploy updates:
+
+1. Open the terminal and navigate to the `sw-afc-public-infra` folder.
+2. Pull updates from the infrastructure repository
+
+    ```bash
+    git pull
+    ```
+3. Upgrade Terraform providers:
+    ```bash
+    terraform init --upgrade
+    ```
+4. Run the following command to deploy:
+
+    ```bash
+    terraform apply
+    ```
+
+    Confirm with "yes" when prompted.
+
+5. After the deployment completes, the application is updated.
