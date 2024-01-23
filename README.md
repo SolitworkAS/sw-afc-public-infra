@@ -74,3 +74,29 @@ Follow these steps to deploy the infrastructure:
 
 8. After the deployment completes, you can access the deployed resources.
 
+# Appendix
+
+`terraform.tfvars`
+```hcl
+container_registry          = ""
+container_registry_password = ""
+rabbitmq_password           = ""
+keycloak_admin_password     = ""
+database_password           = ""
+container_registry_username = ""
+emailpassword = ""
+reportingpassword           = ""
+customer                    = ""
+app_admin_email             = ""
+app_admin_first_name        = ""
+app_admin_initial_password  = ""
+app_admin_last_name         = ""
+smtp_from                   = ""
+smtp_host                   = ""
+smtp_port                   = ""
+smtp_username               = ""
+smtp_password               = ""
+include_esg                 = true
+include_carbacc             = true
+include_vat                 = true
+```
