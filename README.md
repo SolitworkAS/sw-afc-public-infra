@@ -20,23 +20,16 @@ Before proceeding, make sure you have the following tools installed:
 
 Follow these steps to deploy the infrastructure:
 
-1. Access the terminal and navigate to the desired folder.
+1. Open the terminal and navigate to the desired folder.
 
-2. Clone the infrastructure repository using Git:
+2. Clone the infrastructure repository
 
     ```bash
     git clone https://github.com/SolitworkAS/sw-afc-public-infra
+    cd sw-afc-public-infra    
     ```
 
-    Change to the cloned directory using:
-
-    ```bash
-    cd sw-afc-public-infra
-    ```
-
-3. **Fill out the `terraform.tfvars` file:**:  
-   Add the file `sw-afc-public-infra/terraform.tfvars` to the directory.  
-   Add the content below to the file and fillout **all** the variables.
+3. Create and configure the `terraform.tfvars` file in the `sw-afc-public-infra` directory. Ensure all variables are filled out correctly. Here's the template: 
 
 ```hcl
 # Customer Information
@@ -62,13 +55,13 @@ app_admin_initial_password  = ""
 app_admin_last_name         = ""
 
 # SMTP Configuration for Sending Signup Emails, Notifications, etc.
-smtp_from                   = "" # Email address for the sender. E.g. noreply@yourdomain.com
-smtp_host                   = "" # Host of the email service. E.g. smtp.serveraddress.com
-smtp_port                   = "" # Port for the identity provider email service
-smtp_username               = "" # Username. Often the same as smtp_from.
-smtp_password               = "" # Password for smtp_password. 
+smtp_from                   = "" # Example: noreply@yourdomain.com
+smtp_host                   = "" # Example: smtp.serveraddress.com
+smtp_port                   = "" # Common ports are 25, 465, 587
+smtp_username               = "" # Often the same as smtp_from
+smtp_password               = "" # Secure password for SMTP server
 
-# Product to deploy
+# Product Deployment Options
 include_esg                 = false
 include_carbacc             = false
 include_vat                 = false
