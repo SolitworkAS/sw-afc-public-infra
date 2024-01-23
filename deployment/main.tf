@@ -1,5 +1,5 @@
 module "main" {
-  source = "../modules/main"
+  source = "./modules/main"
 
   customer = var.customer
 

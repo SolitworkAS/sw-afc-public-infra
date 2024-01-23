@@ -2,11 +2,6 @@
 
 ## 1.1 Pre-requisites
 
-
-Certainly! A concise and easily understandable prerequisites section is crucial for clear communication. Here's a streamlined version of your prerequisites section:
-
-## 1.1 Pre-requisites
-
 Before starting, ensure you have:
 
 - **Azure Access**: Credentials for the Azure Tenant and Subscription where the apps will be hosted.

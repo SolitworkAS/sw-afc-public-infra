@@ -112,6 +112,7 @@ variable "reportingpassword" {
 }
 
 variable "availability_zone" {
+  default = "1"
   description = "availability zone"
 }
 
