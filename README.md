@@ -74,4 +74,3 @@ Follow these steps to deploy the infrastructure:
 
 8. After the deployment completes, you can access the deployed resources.
 
-By following these steps, you'll successfully deploy the infrastructure using Terraform, with the required values filled out in the `terraform.tfvars` file.
