@@ -5,6 +5,8 @@
 Before starting, ensure you have: 
 
 - **Azure Access**: Credentials for the Azure Tenant and Subscription where the apps will be hosted.
+  - Tenand id
+  - Subscription id
 - **Container Registry Access**: Solitwork Azure Container Registry credentials (provided by Solitwork).
 - **Secure Credentials**: Create strong passwords for:
   - Reporting User
@@ -84,8 +86,9 @@ include_vat                 = false
     terraform init
     ```
 
-5. Login to the azure subscription that should host the installation
+5. Login to the azure tenant and subscription that should host the installation
     ```bash
+    az login --tenant "<tenant-id>"
     az account set --subscription "<subscription-id>"
     ```
 
@@ -109,8 +112,9 @@ Follow these steps to deploy updates:
     ```bash
     git pull
     ```
-3. Login to the subscription where your installation is deployed
+3. Login to the azure tenant and subscription that hosts the installation
     ```bash
+    az login --tenant "<tenant-id>"
     az account set --subscription "<subscription-id>"
     ```
 4. Upgrade Terraform providers:
