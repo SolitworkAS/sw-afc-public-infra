@@ -146,7 +146,7 @@ module "vat" {
 
 resource "time_sleep" "wait_30_seconds" {
   depends_on = [module.environment]
-  create_duration = "30s"
+  create_duration = "120s"
 }
 
 module "realm" {
