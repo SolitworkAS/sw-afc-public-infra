@@ -34,7 +34,7 @@ variable "customer" {
 
 variable "carbacc_version" {
   description = "version of carbacc to deploy"
-  default = "1.5.0"
+  default = "1.5.2"
 }
 
 variable "esg_version" {
