@@ -84,7 +84,12 @@ include_vat                 = false
     terraform init
     ```
 
-5. Run the following command to deploy:
+5. Login to the azure subscription that should host the installation
+    ```bash
+    az account set --subscription "<subscription-id>"
+    ```
+
+6. Run the following command to deploy:
 
     ```bash
     terraform apply
@@ -92,7 +97,7 @@ include_vat                 = false
 
     Confirm with "yes" when prompted.
 
-6. After the deployment completes, you can access the deployed resources.
+7. After the deployment completes, you can access the deployed resources.
 
 ## 1.4 Updating
 
@@ -104,16 +109,19 @@ Follow these steps to deploy updates:
     ```bash
     git pull
     ```
-3. Upgrade Terraform providers:
+3. Login to the subscription where your installation is deployed
+    ```bash
+    az account set --subscription "<subscription-id>"
+    ```
+4. Upgrade Terraform providers:
     ```bash
     terraform init --upgrade
     ```
-4. Run the following command to deploy:
+5. Run the following command to deploy:
 
     ```bash
     terraform apply
     ```
 
     Confirm with "yes" when prompted.
-
-5. After the deployment completes, the application is updated.
+6. After the deployment completes, the application is updated.
