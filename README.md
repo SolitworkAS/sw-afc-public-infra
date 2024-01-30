@@ -55,7 +55,7 @@ container_registry_password = ""
 
 # Internal Product Components Passwords
 rabbitmq_password           = ""
-keycloak_admin_password     = ""
+keycloak_admin_password     = "" # Password for the admin user in keycloak, the user management server
 database_password           = ""
 
 # Reporting User Password
@@ -64,8 +64,8 @@ reportingpassword           = ""
 # Initial Admin User Information for ESG Application
 app_admin_email             = ""
 app_admin_first_name        = ""
-app_admin_initial_password  = ""
 app_admin_last_name         = ""
+app_admin_initial_password  = ""
 
 # SMTP Configuration for Sending Signup Emails, Notifications, etc.
 smtp_from                   = "" # Example: noreply@yourdomain.com
@@ -75,9 +75,9 @@ smtp_username               = "" # Often the same as smtp_from
 smtp_password               = "" # Secure password for SMTP server
 
 # Product Deployment Options
-include_esg                 = false
-include_carbacc             = false
-include_vat                 = false
+include_esg                 = false # Set to true if you are an ESG customer
+include_carbacc             = false # Set to true if you are an ESG customer
+include_vat                 = false # Set to true if you are a VAT customer
 ```
 
 4. Initialize Terraform:
