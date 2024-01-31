@@ -100,7 +100,7 @@ include_vat                 = false # Set to true if you are a VAT customer
 
     Confirm with "yes" when prompted.
 
-7. After the deployment completes, you can access the deployed resources.
+7. After the deployment completes, terraform will output several urls essential for accessing and setting up the products. Please make sure to save them a conventient place. Find a detailed explanation of the urls and how to access and use them in the appendix below. 
 
 ## 1.4 Updating
 
@@ -128,4 +128,27 @@ Follow these steps to deploy updates:
     ```
 
     Confirm with "yes" when prompted.
-6. After the deployment completes, the application is updated.
+6. After successful deployment, Terraform will output several URLs that are crucial for accessing and configuring the products. Save these URLs in a convenient place. 
+7. Please go through section 1.5 URL Descriptions for a detailed explanation of the URLS and how to access them. 
+
+## 1.5 URL Descriptions
+
+After deployment, Terraform provides several URLs crucial for accessing and managing the deployed products. Below is a detailed description of each URL along with the access requirements:
+
+| URL                         | Description                                                                                               | Access                                                                                                   |
+|-----------------------------|-----------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
+| `carbacc_frontend_url`      | The user interface for carbon accounting.                                                                 | Requires a user created through the ESG user interface with Carbon rights.                               |
+| `carbon_api_url`            | API interface for carbon accounting. Access documentation at `/swagger.index.html`.                       | Requires a user created through the ESG user interface. The user should have the Carbon role.                               |
+| `esg_frontend_url`          | The user interface for ESG.                                                                               | Requires a user with at least the Respondent role. For initial access, use the Admin User details from `terraform.tfvars`. |
+| `esg_organization_api`      | API interface for setting up organizations and departments in ESG. Access documentation at `/docs`.                                        | Requires a user created through the ESG user interface with Admin role.                                |
+| `esg_reporting_api`         | API interface for obtaining ESG data for reporting purposes. Access documentation at `/docs`.                                             | Requires a user created through the ESG user interface with the Admin role.                                |
+| `keycloak_url`              | The Keycloak server for setting up Single Sign-On (SSO) integration.                                      | Log in with the username `admin` and the admin password set in `terraform.tfvars`. Guide available in `sw-afc-public-infra/guides/sso-setup/README.md`.          |
+| `vat_api_url`               | API interface for VAT.                                                                                    |                                                                                                          |
+| `vat_frontend_url`          | The user interface for VAT.                                                                               |                                                                                                          |
+
+
+## Frequently Asked Questions (FAQ)
+
+### Q1: What should I do if I encounter an error stating `... context deadline exceeded ...` during installation or update?
+**A:** This error often occurs due to issues with the internet connection. A simple solution is to try running the command `terraform apply` again. If the problem persists, ensure that your internet connection is stable and retry.
+

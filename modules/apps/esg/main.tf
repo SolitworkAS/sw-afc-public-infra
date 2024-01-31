@@ -145,7 +145,7 @@ resource "azapi_resource" "esg_notification_manager" {
       },
       {
         name  = "SWAGGER_DOCS"
-        value = "false"
+        value = "True"
       },
       {
         name = "RBMQ_HOST"
@@ -332,7 +332,7 @@ resource "azapi_resource" "esg_frontend_service" {
         
         ]
         scale = {
-          minReplicas = var.min_replicas
+          minReplicas = 1
           maxReplicas = var.max_replicas
         }
       }
@@ -496,7 +496,7 @@ resource "azapi_resource" "esg_reporting_manager" {
         
         ]
         scale = {
-          minReplicas = var.min_replicas
+          minReplicas = 1
           maxReplicas = var.max_replicas
         }
       }
@@ -588,7 +588,7 @@ resource "azapi_resource" "esg_user_management" {
       },
       {
         name  = "SWAGGER_DOCS"
-        value = "false"
+        value = "True"
       },
       {
         name  = "POSTGRES_SERVER"
@@ -656,7 +656,7 @@ resource "azapi_resource" "esg_user_management" {
         
         ]
         scale = {
-          minReplicas = var.min_replicas
+          minReplicas = 1
           maxReplicas = var.max_replicas
         }
         initContainers = [
@@ -836,7 +836,7 @@ resource "azapi_resource" "esg_survey_manager" {
       },
       {
         name  = "SWAGGER_DOCS"
-        value = "false"
+        value = "True"
       },
       {
         name = "LOGIN_PAGE"
@@ -939,7 +939,7 @@ resource "azapi_resource" "esg_survey_manager" {
       },
       {
         name  = "SWAGGER_DOCS"
-        value = "false"
+        value = "True"
       },
       {
         name  = "POSTGRES_SERVER"
@@ -1089,7 +1089,7 @@ resource "azapi_resource" "esg_organization_module" {
       },
       {
         name  = "SWAGGER_DOCS"
-        value = "false"
+        value = "True"
       },
       {
         name  = "POSTGRES_SERVER"
@@ -1157,7 +1157,7 @@ resource "azapi_resource" "esg_organization_module" {
         
         ]
         scale = {
-          minReplicas = var.min_replicas
+          minReplicas = 1
           maxReplicas = var.max_replicas
         }
         initContainers = [
