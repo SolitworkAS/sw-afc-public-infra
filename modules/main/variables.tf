@@ -43,6 +43,11 @@ variable "esg_version" {
 variable "vat_version" {
   description = "version of esg to deploy"
 }
+
+variable "keycloak_version" {
+  default     = "1.0.0"
+  
+}
 # CONTAINER REGISTRY VARIABLES
 variable "container_registry" {
   default     = "imagesdevregistry.azurecr.io"

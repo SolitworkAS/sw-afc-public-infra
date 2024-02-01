@@ -14,7 +14,7 @@ locals {
   keycloak_client_id          = "afc-carbacc"
   keycloak_client_id_esg          = "afc-esg"
   keycloak_client_id_vat          = "afc-vat"
-  keycloak_image = "${var.container_registry}/images/environment/keycloak:1.0.0"
+  keycloak_image = "${var.container_registry}/images/environment/keycloak:${var.keycloak_version}"
 
   # Queue configuration
   rabbitmq_name               = "rabbitmq"

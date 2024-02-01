@@ -138,7 +138,7 @@ After deployment, Terraform provides several URLs crucial for accessing and mana
 | URL                         | Description                                                                                               | Access                                                                                                   |
 |-----------------------------|-----------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
 | `carbacc_frontend_url`      | The user interface for carbon accounting.                                                                 | Requires a user created through the ESG user interface with Carbon rights.                               |
-| `carbon_api_url`            | API interface for carbon accounting. Access documentation at `/swagger.index.html`.                       | Requires a user created through the ESG user interface. The user should have the Carbon role.                               |
+| `carbon_api_url`            | API interface for carbon accounting. Access documentation at `/swagger/index.html`.                       | Requires a user created through the ESG user interface. The user should have the Carbon role.                               |
 | `esg_frontend_url`          | The user interface for ESG.                                                                               | Requires a user with at least the Respondent role. For initial access, use the Admin User details from `terraform.tfvars`. |
 | `esg_organization_api`      | API interface for setting up organizations and departments in ESG. Access documentation at `/docs`.                                        | Requires a user created through the ESG user interface with Admin role.                                |
 | `esg_reporting_api`         | API interface for obtaining ESG data for reporting purposes. Access documentation at `/docs`.                                             | Requires a user created through the ESG user interface with the Admin role.                                |
@@ -151,4 +151,7 @@ After deployment, Terraform provides several URLs crucial for accessing and mana
 
 ### Q1: What should I do if I encounter an error stating `... context deadline exceeded ...` during installation or update?
 **A:** This error often occurs due to issues with the internet connection. A simple solution is to try running the command `terraform apply` again. If the problem persists, ensure that your internet connection is stable and retry.
+
+### Q2: Why aren't users receiving an invitation email after I create them in the ESG Users page?
+**A:** To resolve this issue, first verify that your solution is correctly configured with a valid SMTP in the terraform.tfvars file, specifically under the "Initial Admin User Information for ESG Application" section. If this configuration is incomplete, please fill out all the required fields and execute the `terraform apply` command to apply the changes. This should ensure that invitation emails are sent out successfully. After a successful configuration, go to the ESG Users page, locate the users who need the invitation email, click the three dots next to each user, and select 'Resend Invitation Email'.
 

@@ -21,6 +21,7 @@ module "environment" {
   rabbitmq_password           = var.rabbitmq_password
   rabbitmq_user               = var.rabbitmq_user
   availability_zone = var.availability_zone
+  keycloak_version = var.keycloak_version
 }
 
 module "carbacc" {

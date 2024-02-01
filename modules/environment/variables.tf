@@ -15,6 +15,10 @@ variable "resource_group_name" {
   }
 }
 
+variable "keycloak_version" {
+  default     = "1.0.0"
+}
+
 variable "customer" {
   description = "shorthand abbrieviation for customer name, must only contain lowercase letters and numbers"
   validation {

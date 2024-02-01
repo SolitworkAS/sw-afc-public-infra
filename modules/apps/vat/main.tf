@@ -3,17 +3,17 @@
 locals {
   # Vat processor configuration
   vat_processor_name          = "vat-processor"
-  vat_processor_image         = "${var.container_registry}/images/vat/vat-processor:${var.vat_version}"
+  vat_processor_image         = "${var.container_registry}/images/vat/processor:${var.vat_version}"
   
   # Vat datamanager configuration
   vat_datamanager_name        = "vatapi"
-  vat_datamanager_image       = "${var.container_registry}/images/vat/vat-datamanager:${var.vat_version}"
+  vat_datamanager_image       = "${var.container_registry}/images/vat/datamanager:${var.vat_version}"
   attachments_mount_path      = "/mnt/vatfiles"
-  vat_datamanager_init_image  = "${var.container_registry}/images/vat/vat-datamanager-init:${var.vat_version}"
+  vat_datamanager_init_image  = "${var.container_registry}/images/vat/datamanager-init:${var.vat_version}"
 
   # Vat frontend configuration
   vat_frontend_name           = "vat"
-  vat_frontend_image          = "${var.container_registry}/images/vat/vat-frontend:${var.vat_version}"
+  vat_frontend_image          = "${var.container_registry}/images/vat/frontend:${var.vat_version}"
 
   # Queue configuration
   rabbitmq_name               = "rabbitmq"
