@@ -8,6 +8,7 @@ Before starting, ensure you have:
   - Tenand id
   - Subscription id
 - **Container Registry Access**: Solitwork Azure Container Registry credentials (provided by Solitwork).
+- **Licence Key**: Secure code required to activate and use our product(s), ensuring access to its full features and benefits. (Provide by Solitwork)
 - **Secure Credentials**: Create strong passwords for:
   - Reporting User
   - Admin User
@@ -78,6 +79,9 @@ smtp_password               = "" # Secure password for SMTP server
 include_esg                 = false # Set to true if you are an ESG customer
 include_carbacc             = false # Set to true if you are an ESG customer
 include_vat                 = false # Set to true if you are a VAT customer
+
+# Licence key (provided by Solitwork)
+license_key                 = "" # Licence key to verify our access to the product
 ```
 
 4. Initialize Terraform:
