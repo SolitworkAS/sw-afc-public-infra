@@ -5,10 +5,10 @@
 Before starting, ensure you have: 
 
 - **Azure Access**: Credentials for the Azure Tenant and Subscription where the apps will be hosted.
-  - Tenand id
+  - Tenant id
   - Subscription id
 - **Container Registry Access**: Solitwork Azure Container Registry credentials (provided by Solitwork).
-- **Licence Key**: Secure code required to activate and use our product(s), ensuring access to its full features and benefits. (Provide by Solitwork)
+- **Licence Key**: Secure code required to activate and use our product(s), ensuring access to its full features and benefits. (Provided by Solitwork)
 - **Secure Credentials**: Create strong passwords for:
   - Reporting User
   - Admin User
@@ -27,7 +27,7 @@ Before starting, ensure you have:
 Before proceeding, make sure you have the following tools installed:
 
 1. Install the official [Terraform](https://www.terraform.io/) CLI. 
-2. Install the [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli).
+2. Install the [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli). Link to a guide for setting up Terraform CLI on Windows with Bash [Install Terraform on Windows with Bash](https://learn.microsoft.com/en-us/azure/developer/terraform/get-started-windows-bash?tabs=bash)
 3. Ensure Git is installed on your machine.
 
 ## 1.3 Installing
@@ -80,8 +80,9 @@ include_esg                 = false # Set to true if you are an ESG customer
 include_carbacc             = false # Set to true if you are an ESG customer
 include_vat                 = false # Set to true if you are a VAT customer
 
-# Licence key (provided by Solitwork)
-license_key                 = "" # Secure code to activate your products. Product(s) wont work without this.
+# License Key
+license_key = "" # Your unique license key. The product(s) will not function without this key.
+
 ```
 
 4. Initialize Terraform:
