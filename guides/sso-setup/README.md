@@ -40,6 +40,8 @@ First we set up the base identity provider in Keycloak.
 
 ![](pics/KeyCloak2.png)
 
+7. With the copied Redirect URI, go through 2.-4., where you will set up the integration in Azure. Leave the keycloak tab open. You will finalize the configuration in here in step 5.
+
 ## 2. Microsoft Entra ID App Registration
 
 Now to register the application in Microsoft Entra ID. 
