@@ -27,8 +27,11 @@ Before starting, ensure you have:
 Before proceeding, make sure you have the following tools installed:
 
 1. Install the official [Terraform](https://www.terraform.io/) CLI. 
-2. Install the [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli). Link to a guide for setting up Terraform CLI on Windows with Bash [Install Terraform on Windows with Bash](https://learn.microsoft.com/en-us/azure/developer/terraform/get-started-windows-bash?tabs=bash)
+   - In Windows Powershell, run `winget install --id=Hashicorp.Terraform  -e`
+2. Install the [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli).
+   - In Windows Powershell, run `winget install -e --id Microsoft.AzureCLI`
 3. Ensure Git is installed on your machine.
+   - In Windows Powershell, run `winget install -e --id Git.Git`
 
 ## 1.3 Installing
 
