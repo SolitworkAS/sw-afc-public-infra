@@ -308,7 +308,7 @@ This is the intended usage for any kind of reporting, no matter if it's for powe
 See below what apis you should pull to get what data.  
 | # | URL                                                      | Description                                                                                                   | Docs                 |
 |---|----------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|----------------------|
-| 1 | `https://{...carbacc-taskmanagement-service...}/importactivities` | All tagged, autotagged and excluded activities.                                                               | `/swagger/index.html` |
+| 1 | `https://{...carbacc-taskmanagement-service...}/activitiesexport` | All tagged, autotagged and excluded activities.                                                               | `/swagger/index.html` |
 | 2 | `https://{...carbacc-taskmanagement-service...}/accountingrules` | All accounting rules. Accounting rules generate the autotags. Use in comparison with importactivities        | `/swagger/index.html` |
 | 3 | `https://{...carbacc-taskmanagement-service...}/filterrules` | All exclusion rules. Exclusion rules are responsible for excluded activities. Use in comparison with importactivities | `/swagger/index.html` |
 | 4 | `https://{...carbacc-taskmanagement-service...}/emissionfactorsexport` | All Emission factors applied by any tag or accounting rule.                                                  | `/swagger/index.html` |
