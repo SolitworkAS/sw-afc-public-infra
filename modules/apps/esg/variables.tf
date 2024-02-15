@@ -154,16 +154,6 @@ variable rabbitmq_host {
   description = "url of the rabbitmq service"
 }
 
-variable "emailpassword" {
-  description = "password for email user, must be at least 8 characters long"
-  default = "password"
-  sensitive = true
-  validation {
-    condition = can(regex("^.{8,}$", var.emailpassword))
-    error_message = "email must be at least 8 characters long"
-  }
-}
-
 variable "reportingpassword" {
   description = "password for reporting user, must be at least 8 characters long"
   sensitive = true
@@ -196,4 +186,30 @@ variable "keycloak_client_id_esg" {
 
 variable "default_domain"{
   description = "default domain"
+}
+
+# SMTP VARIABLES
+variable "smtp_host" {
+  description = "SMTP host"
+}
+variable "smtp_port" {
+  description = "SMTP port, must be a number"
+  validation {
+    condition     = can(regex("^[0-9]+$", var.smtp_port))
+    error_message = "SMTP port must be a number"
+  }
+}
+variable "smtp_username" {
+  description = "SMTP username"
+}
+variable "smtp_password" {
+  description = "SMTP password"
+  sensitive   = true
+}
+variable "smtp_from" {
+  description = "SMTP from address, must be a valid email address"
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$", var.smtp_from))
+    error_message = "SMTP from address must be a valid email address"
+  }
 }

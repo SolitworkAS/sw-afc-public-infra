@@ -95,7 +95,6 @@ module "esg" {
   database_server_id  = module.environment.database_server_id
   database_user       = var.database_user
   database_password   = var.database_password
-  emailpassword =  var.smtp_password
   reportingpassword   = var.reportingpassword
   rabbitmq_host       = module.environment.rabbitmq_name
 
@@ -103,6 +102,11 @@ module "esg" {
   keycloak_url = module.environment.keycloak_url
   default_domain = module.environment.default_domain
 
+  smtp_host     = var.smtp_host
+  smtp_port     = var.smtp_port
+  smtp_username = var.smtp_username
+  smtp_password = var.smtp_password
+  smtp_from     = var.smtp_from
 
   depends_on = [module.environment]
 }

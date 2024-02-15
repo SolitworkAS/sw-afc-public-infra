@@ -82,7 +82,7 @@ resource "azapi_resource" "esg_notification_manager" {
           },
           {
             name = "emailpassword"
-            value = var.emailpassword
+            value = var.smtp_password
           }
 
         ]
@@ -169,15 +169,15 @@ resource "azapi_resource" "esg_notification_manager" {
       },
       {
         name        = "EMAIL_PORT"
-        value = "587"
+        value = var.smtp_port
       },
       {
         name        = "EMAIL_SMTP_SERVER"
-        value = "smtp.office365.com"
+        value = var.smtp_host
       },
       {
         name        = "EMAIL"
-        value = "noreply@afcsoftware.com"
+        value = var.smtp_username
       },
       {
         name        = "EMAIL_PASSWORD"
