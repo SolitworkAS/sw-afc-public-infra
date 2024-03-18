@@ -22,6 +22,13 @@ locals {
   esg_survey_manager_image = "${var.container_registry}/images/esg/survey_manager:${var.esg_version}"
   esg_survey_manager_init_image  = "${var.container_registry}/images/esg/survey_manager_init:${var.esg_version}"
 
+  # ESG Jobs
+
+  esg_job_notification_name  = "esg-job-notification-manager"
+  esg_job_notification_image = "${var.container_registry}/images/esg/job_notifications:${var.esg_version}"
+  esg_job_schedulation_name  = "esg-job-schedulation-manager"
+  esg_job_schedulation_image = "${var.container_registry}/images/esg/job_schedulations:${var.esg_version}"
+
   attachments_mount_path      = "/mnt/code/surveyfiles"
   # Queue configuration
   rabbitmq_name               = "rabbitmq"
@@ -176,7 +183,11 @@ resource "azapi_resource" "esg_notification_manager" {
         value = var.smtp_host
       },
       {
-        name        = "EMAIL"
+        name        = "EMAIL_LOGIN"
+        value = var.smtp_username
+      },
+      {
+        name        = "EMAIL_FROM"
         value = var.smtp_username
       },
       {
@@ -776,6 +787,10 @@ resource "azapi_resource" "esg_survey_manager" {
           {
             name = "containerregistrypassword"
             value = var.container_registry_password
+          },
+          {
+            name = "reportingpassword"
+            value = var.reportingpassword
           }
         ]
         registries = [
@@ -894,6 +909,21 @@ resource "azapi_resource" "esg_survey_manager" {
         name  = "KEYCLOAK_CLIENT_ID"
         value = var.keycloak_client_id_esg
       }
+      ,
+      {
+        name  = "JOB_SURVEY_MANAGER_HOST"
+        value = "https://esg-job-survey-manager.${var.default_domain}"
+      }
+      ,
+      {
+        name  = "JOB_ADMIN_USERNAME"
+        value = "reporting@solitwork.com"
+      }
+      ,
+      {
+        name  = "JOB_ADMIN_PASSWORD"
+        secretRef = "reportingpassword"
+      }
             ]
             
             volumeMounts = [
@@ -996,6 +1026,19 @@ resource "azapi_resource" "esg_survey_manager" {
       {
         name  = "KEYCLOAK_CLIENT_ID"
         value = var.keycloak_client_id_esg
+      },
+      {
+        name  = "JOB_SURVEY_MANAGER_HOST"
+        value = "https://esg-job-survey-manager.${var.default_domain}"
+      }
+      ,
+      {
+        name  = "JOB_ADMIN_USERNAME"
+        value = "reporting@solitwork.com"
+      },
+      {
+        name  = "JOB_ADMIN_PASSWORD"
+        secretRef = "reportingpassword"
       }
             ]
           }
@@ -1254,4 +1297,312 @@ resource "azapi_resource" "esg_organization_module" {
 }
 
 
+### Job containers
 
+
+
+resource "azapi_resource" "esg-job-schedulations" {
+  type      = "Microsoft.App/jobs@2023-05-02-preview"
+  name      = local.esg_job_schedulation_name
+  parent_id = var.resource_group_id
+  location = var.location
+  schema_validation_enabled = false
+  
+  body = jsonencode({
+    properties = {
+      configuration = {
+        registries = [
+          {
+            server = var.container_registry
+            username = var.container_registry_username
+            passwordSecretRef = "containerregistrypassword"
+          }
+        ]
+        replicaRetryLimit = 1
+        replicaTimeout = 180
+        scheduleTriggerConfig = {
+          cronExpression = "0 6 * * *"
+          parallelism = 1
+          replicaCompletionCount = 1
+        }
+       secrets = [
+          {
+            name = "rabbitmqpassword"
+            value = var.rabbitmq_password
+          },
+          {
+            name = "databasepassword"
+            value = var.database_password
+          },
+          {
+            name = "containerregistrypassword"
+            value = var.container_registry_password
+          },
+          {
+            name = "containerregistrypassword"
+            value = var.container_registry_password
+          },
+          {
+            name = "reportingpassword"
+            value = var.reportingpassword
+          }
+        ]
+        triggerType = "Schedule"
+      }
+      environmentId = var.container_app_environment_id
+      template = {
+        containers = [
+          {
+            image = local.esg_job_schedulation_image
+            name = "esg-job-schedulation"
+            resources = {
+              cpu = 0.25
+              memory = "0.5Gi"
+            }
+            env = [
+          {
+            name  = "LOG_LEVEL"
+            value = "INFO"
+          },
+          {
+            name  = "VERSION"
+            value = "0.1.0"
+          },
+          {
+            name  = "API_PATH"
+            value = "/"
+          },
+          {
+            name  = "SWAGGER_DOCS"
+            value = "True"
+          },
+          {
+            name = "LOGIN_PAGE"
+            value = "https://esg-frontend-service.${var.default_domain}"
+          },
+          {
+            name  = "POSTGRES_SERVER"
+            value = var.database_server_url
+          },
+          {
+            name  = "POSTGRES_DB"
+            value = var.database_database
+          },
+          {
+            name  = "POSTGRES_USER"
+            value = var.database_user
+          },
+          {
+            name  = "FILE_UPLOAD_PATH"
+            value = "/mnt/code/surveyfiles"
+          },
+          {
+            name        = "POSTGRES_PASSWORD"
+            secretRef = "databasepassword"
+          },
+          {
+            name = "RBMQ_HOST"
+            value = var.rabbitmq_host
+          },
+          {
+            name = "RBMQ_PORT"
+            value = "5672"
+          },
+          {
+            name = "RBMQ_VHOST"
+            value = var.customer
+          },
+          {
+            name = "RBMQ_USER"
+            value = var.rabbitmq_user
+          },
+          {
+            name = "RBMQ_PASSWORD"
+            secretRef = "rabbitmqpassword"
+          },
+          {
+            name  = "KEYCLOAK_URL"
+            value = var.keycloak_url
+          },
+          {
+            name  = "KEYCLOAK_REALM"
+            value = var.keycloak_realm
+          },
+          {
+            name  = "KEYCLOAK_CLIENT_ID"
+            value = var.keycloak_client_id_esg
+          }
+          ,
+          {
+            name  = "JOB_SURVEY_MANAGER_HOST"
+            value = "https://esg-job-survey-manager.${var.default_domain}"
+          }
+          ,
+          {
+            name  = "JOB_ADMIN_USERNAME"
+            value = "reporting@solitwork.com"
+          }
+          ,
+          {
+            name  = "JOB_ADMIN_PASSWORD"
+            secretRef = "reportingpassword"
+          }
+                ]
+          }
+        ]
+      }
+    }
+  })
+}
+
+resource "azapi_resource" "esg-job-notifications" {
+  type = "Microsoft.App/jobs@2023-05-02-preview"
+  name = local.esg_job_notification_name
+  location = var.location
+  parent_id = var.resource_group_id
+  body = jsonencode({
+    properties = {
+      configuration = {
+        registries = [
+          {
+            server = var.container_registry
+            username = var.container_registry_username
+            passwordSecretRef = "containerregistrypassword"
+          }
+        ]
+        replicaRetryLimit = 1,
+        replicaTimeout = 180,
+        scheduleTriggerConfig = {
+          cronExpression = "0 6 * * *",
+          parallelism = 1,
+          replicaCompletionCount = 1,
+        }
+        secrets = [
+          {
+            name = "rabbitmqpassword"
+            value = var.rabbitmq_password
+          },
+          {
+            name = "databasepassword"
+            value = var.database_password
+          },
+          {
+            name = "containerregistrypassword"
+            value = var.container_registry_password
+          },
+          {
+            name = "containerregistrypassword"
+            value = var.container_registry_password
+          },
+          {
+            name = "reportingpassword"
+            value = var.reportingpassword
+          }
+        ]
+        triggerType = "Schedule"
+      }
+      environmentId = var.container_app_environment_id
+      template = {
+        containers = [
+          {
+            env = [
+              {
+            name  = "LOG_LEVEL"
+            value = "INFO"
+          },
+          {
+            name  = "VERSION"
+            value = "0.1.0"
+          },
+          {
+            name  = "API_PATH"
+            value = "/"
+          },
+          {
+            name  = "SWAGGER_DOCS"
+            value = "True"
+          },
+          {
+            name = "LOGIN_PAGE"
+            value = "https://esg-frontend-service.${var.default_domain}"
+          },
+          {
+            name  = "POSTGRES_SERVER"
+            value = var.database_server_url
+          },
+          {
+            name  = "POSTGRES_DB"
+            value = var.database_database
+          },
+          {
+            name  = "POSTGRES_USER"
+            value = var.database_user
+          },
+          {
+            name  = "FILE_UPLOAD_PATH"
+            value = "/mnt/code/surveyfiles"
+          },
+          {
+            name        = "POSTGRES_PASSWORD"
+            secretRef = "databasepassword"
+          },
+          {
+            name = "RBMQ_HOST"
+            value = var.rabbitmq_host
+          },
+          {
+            name = "RBMQ_PORT"
+            value = "5672"
+          },
+          {
+            name = "RBMQ_VHOST"
+            value = var.customer
+          },
+          {
+            name = "RBMQ_USER"
+            value = var.rabbitmq_user
+          },
+          {
+            name = "RBMQ_PASSWORD"
+            secretRef = "rabbitmqpassword"
+          },
+          {
+            name  = "KEYCLOAK_URL"
+            value = var.keycloak_url
+          },
+          {
+            name  = "KEYCLOAK_REALM"
+            value = var.keycloak_realm
+          },
+          {
+            name  = "KEYCLOAK_CLIENT_ID"
+            value = var.keycloak_client_id_esg
+          }
+          ,
+          {
+            name  = "JOB_SURVEY_MANAGER_HOST"
+            value = "https://esg-job-survey-manager.${var.default_domain}"
+          }
+          ,
+          {
+            name  = "JOB_ADMIN_USERNAME"
+            value = "reporting@solitwork.com"
+          }
+          ,
+          {
+            name  = "JOB_ADMIN_PASSWORD"
+            secretRef = "reportingpassword"
+          }
+            ]
+            image = local.esg_job_notification_image
+            name = local.esg_job_notification_name
+            resources = {
+              cpu = 0.25
+              memory = "0.5Gi"
+            }
+          }
+        ]
+      }
+    }
+  })
+}

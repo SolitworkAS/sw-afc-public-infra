@@ -12,7 +12,9 @@
 - [5. Reporting purposes](#5-reporting-purposes)
 
 # 1 Introduction
-Start by getting the URLS. If Solitwork hosts, contact PST. If Customer hosts, contact their IT department.
+Start by getting the URLS. The way to get them depends on who host the solution:  
+* If Solitwork hosts, contact PST.  
+* If Customer hosts, contact their IT department.  
 All URL you'll need in the application follows the same structure. For instance, ESG which follows the structure below:  
 `https://esg-frontend-service.<SOME-UNIQUE-STRING>.northeurope.azurecontainerapps.io/`
 `<SOME-UNIQUE-STRING>` is the same for across all endpoints on the same customer.
@@ -28,17 +30,20 @@ Throughout this guide we will access the following urls.
 `https://carbacc-taskmanagement-service.<SOME-UNIQUE-STRING>.northeurope.azurecontainerapps.io`
 
 # 2 Create User
-Let's start create a system user we can use for interacting with the endpoint.  
-Head into the esg application at:
-`https://esg-frontend-service.<SOME-UNIQUE-STRING>.northeurope.azurecontainerapps.io/`.   
-A user with access to all of the endpoints in this guide will need the `Admin` and `Carbon` role.  
-**Note**: Make sure you have access to email of the user as you'll need to verify the system user through an email verification flow.  
-Save the credentials for the user. You will need that for the rest of the guide.
+To interact with the endpoints, it's essential to create a system user with the appropriate privileges.  
+Follow these steps to create a system user with all priveliged required throughout this guide.  
+You must have admin-level access to perform these actions. Ask your administrators for such access. 
+1. Navigate to the ESG application using the following URL:  `https://esg-frontend-service.<SOME-UNIQUE-STRING>.northeurope.azurecontainerapps.io/`.   
+3. Login with the admin user.
+4. Go to the User management tab in the left hand side of the side.
+5. Create a user with the required privileges. Access to all of the endpoints in this guide will need the `Admin` and `Carbon` role.  
+**Note**: Make sure you have access to the email of the user as you'll need to verify the user through an email verification flow.  
+6. Save the credentials for the user. You will need that for the rest of the guide.
 
 # 3 Create organization and department entities.
 For this part we will need the following url:
 `https://esg-organization-module.<SOME-UNIQUE-STRING>.northeurope.azurecontainerapps.io`
-Swagger docs are available at /docs.
+Swagger docs are available at `/docs`.
 
 Let's start getting an access token 
 ```python
@@ -166,10 +171,10 @@ Deleted surveys cannot be recovered. Therefore you should do this with caution.
 The deletions endpoints are served at `/delete-organization/{organizationId}` and `/delete-organization/{departmentId}`. Please go to `f'{esg_base_url}/docs'` for more information.
 
 
-4 Activities in carbon.
+# 4. Activities in Carbon.
 For this part we will need the following url:
 `https://carbacc-taskmanagement-service.<SOME-UNIQUE-STRING>.northeurope.azurecontainerapps.io`
-Swagger docs are available at `/docs`.
+Swagger docs are available at `/swagger/index.html`.
 
 ```python
 SOME_UNIQUE_STRING = ""
@@ -290,19 +295,19 @@ requests.delete(delete_url,
 ```
 Now the activity should be deleted. 
 
-# 4. Consequenses deleting and updating activities.
+# 5. Consequenses deleting and updating activities.
 The consequences of deleting and updating activities depends on whether or not the activities has been tagged either manually or with rules.
-## 4.5.1 Manually Tagged: 
+## 5.1 Manually Tagged: 
 In case you update or delete a transaction that has been manually tagged you won't be able to recall it for that given transaction afterwards.  
 E.g., if a customer wants to flush a source and load it in again, manual tags will be lost forever. It's therefore very important that in scenarios where customers wants to update or delete activities that you ensure that they are aware that they will lose their manual tags for those activies.  
-## 4.5.2 Tagged By Accounting Rules:
+## 5.2 Tagged By Accounting Rules:
 In cases where the updated and deleted activities are tagged by accounting rules (or exclusion rules) the tag will persist unless the activity are modified in some of the fields that makes it eligible for the given rule.  
 **Example 1**: if you delete an activity and load in the excact same activity it will get the same tag.  
 **Example 2**: If you delete a transaction and you change one of it's fields it will get the same tag if and only if the changed fields doesnt imply that it is now hit by another rule.  
 **Example 3**: If you update an activity it will get the same tag if and only if the changed fields doesnt imply that it is now hit by another rule.
 
 
-# 5. Reporting purposes
+# 6. Reporting purposes
 The next part of the introduction is about how you can pull the data from apis.  
 This is the intended usage for any kind of reporting, no matter if it's for power bi or any storage technology you will use.  
 See below what apis you should pull to get what data.  

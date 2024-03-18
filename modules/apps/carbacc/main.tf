@@ -4,16 +4,12 @@ locals {
   carbacc_souceload_service_name   = "carbacc-sourceload-service"
   carbacc_sourceload_service_image = "${var.container_registry}/images/carbacc/sourceload_service:${var.carbacc_version}"
 
-  # Vat processor configuration
+  # Carbacc taskmanagement configuration
   carbacc_taskmanagement_service_name  = "carbacc-taskmanagement-service"
   carbacc_taskmanagement_service_image = "${var.container_registry}/images/carbacc/taskmanagement_service:${var.carbacc_version}"
   attachments_mount_path               = "/carbacc/files"
 
-  # Vat datamanager configuration
-  carbacc_export_service_name  = "carbacc-export-service"
-  carbacc_export_service_image = "${var.container_registry}/images/carbacc/export_service:${var.carbacc_version}"
-
-  # Vat frontend configuration
+  # Carbacc frontend configuration
   carbacc_frontend_name  = "carbacc-frontend-service"
   carbacc_frontend_image = "${var.container_registry}/images/carbacc/frontend_service:${var.carbacc_version}"
 
@@ -404,154 +400,6 @@ resource "azapi_resource" "carbacc_sourceload_service" {
         name  = "KC_AUDIENCE"
         value = var.keycloak_client_id
       }    
-            ]
-            volumeMounts = [
-              {
-                volumeName = "carbaccfiles"
-                mountPath = local.attachments_mount_path
-              }
-            ]
-          }
-        ]
-        volumes = [
-          {
-            name = "carbaccfiles"
-            storageName = azurerm_container_app_environment_storage.carbaccfiles.name
-            storageType = "AzureFile"
-          }
-        
-        ]
-        scale = {
-          minReplicas = 1
-          maxReplicas = var.max_replicas
-        }
-      }
-    }
-  })
-  response_export_values = [ "properties.configuration.ingress.fqdn", "properties.outboundIpAddresses" ]
-  depends_on = [  azurerm_container_app_environment_storage.carbaccfiles,
-                  azurerm_postgresql_flexible_server_database.carbaccdb
-               ]
-}
-
-resource "azapi_resource" "carbacc_export_service" {
-  type = "Microsoft.App/containerApps@2023-05-01"
-  name = local.carbacc_export_service_name
-  parent_id = var.resource_group_id
-  location = var.location
-  body = jsonencode({
-    properties = {
-      configuration = {
-        secrets = [
-          {
-            name = "rabbitmqpassword"
-            value = var.rabbitmq_password
-          },
-          {
-            name = "databasepassword"
-            value = var.database_password
-          },
-          {
-            name = "containerregistrypassword"
-            value = var.container_registry_password
-          }
-        ]
-        registries = [
-          {
-            server = var.container_registry
-            username = var.container_registry_username
-            passwordSecretRef = "containerregistrypassword"
-          }
-        ]
-        ingress = {
-          external = true
-          targetPort = 80
-          traffic = [
-            {
-              latestRevision = true
-              weight = 100
-            }
-          ]
-          corsPolicy = {
-                    allowedOrigins = [
-                        "https://carbacc-frontend-service.${var.default_domain}"
-                    ],
-                    allowedMethods = [
-                        "*"
-                    ],
-                    allowedHeaders = [
-                        "*"
-                    ],
-                    exposeHeaders: null,
-                    maxAge: 0,
-                    allowCredentials: false
-                }
-        }
-        activeRevisionsMode = "Single"
-      }
-      environmentId = var.container_app_environment_id
-      template = {
-        containers = [
-          {
-            name = "carbacc-export-service"
-            image = local.carbacc_export_service_image
-            resources = {
-              cpu = 1
-              memory = "2Gi"
-            }
-            env = [
-      {
-        name        = "source_ConnectionString"
-        value       = "Host=${var.database_server_url};Port=5432;Username=${var.database_user};Password=${var.database_password};Database=${var.database_database}"
-      },
-      {
-        name        = "destination_ConnectionString"
-        value       = ""
-      },
-      {
-        name  = "TASK_MANAGEMENT_SERVICE_URL"
-        value = "https://${jsondecode(azapi_resource.carbacc_taskmanagement_service.output).properties.configuration.ingress.fqdn}"
-      },
-      {
-        name  = "RABBITMQ_HOST"
-        value = var.rabbitmq_name
-      },
-      {
-        name  = "RABBITMQ_PORT"
-        value = "5672"
-      },
-      {
-        name  = "RABBITMQ_VHOST"
-        value = var.customer
-      },
-      {
-        name  = "RABBITMQ_USER"
-        value = var.rabbitmq_user
-      },
-      {
-        name        = "RABBITMQ_PASSWORD"
-        secretRef = "rabbitmqpassword"
-      },
-      {
-        name  = "KeyCloakUri"
-        value = var.keycloak_url
-      },
-      {
-        name  = "KC_REALM"
-        value = var.keycloak_realm
-      },
-      {
-        name  = "KC_AUDIENCE"
-        value = var.keycloak_client_id
-      },
-      {
-        name  = "REPORT_USER_NAME"
-        value = "reporting@solitwork.com"
-      },
-      {
-        name  = "REPORT_USER_PW"
-        value = var.reportingpassword
-      }       
             ]
             volumeMounts = [
               {
