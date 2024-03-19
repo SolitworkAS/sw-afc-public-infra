@@ -188,7 +188,7 @@ resource "azapi_resource" "esg_notification_manager" {
       },
       {
         name        = "EMAIL_FROM"
-        value = var.smtp_username
+        value = var.smtp_from
       },
       {
         name        = "EMAIL_PASSWORD"
