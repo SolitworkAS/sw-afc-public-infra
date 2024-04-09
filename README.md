@@ -163,3 +163,6 @@ After deployment, Terraform provides several URLs crucial for accessing and mana
 ### Q2: Why aren't users receiving an invitation email after I create them in the ESG Users page?
 **A:** To resolve this issue, first verify that your solution is correctly configured with a valid SMTP in the terraform.tfvars file, specifically under the "Initial Admin User Information for ESG Application" section. If this configuration is incomplete, please fill out all the required fields and execute the `terraform apply` command to apply the changes. This should ensure that invitation emails are sent out successfully. After a successful configuration, go to the ESG Users page, locate the users who need the invitation email, click the three dots next to each user, and select 'Resend Invitation Email'.
 
+### Q3: What if I don't have a compatible SMTP setup?
+**A:** Follow the SMTP guide in the guides folder and you will have a compatible setup by the end of it.
+
