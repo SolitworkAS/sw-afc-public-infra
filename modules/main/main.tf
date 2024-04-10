@@ -101,6 +101,7 @@ module "esg" {
   keycloak_realm = var.customer
   keycloak_url = module.environment.keycloak_url
   default_domain = module.environment.default_domain
+  carbacc_url = var.include_carbacc ? module.carbacc[0].carbon_api_url : ""
 
   smtp_host     = var.smtp_host
   smtp_port     = var.smtp_port

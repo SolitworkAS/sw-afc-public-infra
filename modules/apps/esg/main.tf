@@ -21,7 +21,11 @@ locals {
   esg_survey_manager_name  = "esg-survey-manager"
   esg_survey_manager_image = "${var.container_registry}/images/esg/survey_manager:${var.esg_version}"
   esg_survey_manager_init_image  = "${var.container_registry}/images/esg/survey_manager_init:${var.esg_version}"
+  
+  # CSV service
 
+  esg_csv_service_name  = "esg-csv-service"
+  esg_csv_service_image = "${var.container_registry}/images/esg/csv_importer:${var.esg_version}"
   # ESG Jobs
 
   esg_job_notification_name  = "esg-job-notification-manager"
@@ -1296,6 +1300,117 @@ resource "azapi_resource" "esg_organization_module" {
                ]
 }
 
+### CSV service
+
+resource "azapi_resource" "esg_csv_service" {
+  type = "Microsoft.App/containerApps@2023-05-01"
+  name = local.esg_csv_service_name
+  parent_id = var.resource_group_id
+  location = var.location
+  body = jsonencode({
+    properties = {
+      configuration = {
+        secrets = [
+          {
+            name = "containerregistrypassword"
+            value = var.container_registry_password
+          },
+          {
+            name = "reportingpassword"
+            value = var.reportingpassword
+          }
+        ]
+        registries = [
+          {
+            server = var.container_registry
+            username = var.container_registry_username
+            passwordSecretRef = "containerregistrypassword"
+          }
+        ]
+        ingress = {
+          external = true
+          targetPort = 80
+          traffic = [
+            {
+              latestRevision = true
+              weight = 100
+            }
+          ]
+        }
+        activeRevisionsMode = "Single"
+      }
+      environmentId = var.container_app_environment_id
+      template = {
+        containers = [
+          {
+            name = "esg-csv-service"
+            image = local.esg_csv_service_image
+            resources = {
+              cpu = 0.25
+              memory = "0.5Gi"
+            }
+            env = [
+             {
+              name  = "LOG_LEVEL"
+              value = "INFO"
+            },
+            {
+              name  = "VERSION"
+              value = "0.1.0"
+            },
+            {
+              name  = "API_PATH"
+              value = "/"
+            },
+            {
+              name  = "SWAGGER_DOCS"
+              value = "True"
+            },
+            {
+              name = "CARBACC_URL"
+              value = var.carbacc_url
+            },
+             {
+              name  = "KEYCLOAK_URL"
+              value = var.keycloak_url
+            },
+            {
+              name  = "KEYCLOAK_REALM"
+              value = var.keycloak_realm
+            },
+            {
+              name  = "KEYCLOAK_CLIENT_ID"
+              value = var.keycloak_client_id_esg
+            }
+            ]
+            volumeMounts = [
+              {
+                volumeName = "esgfiles"
+                mountPath = local.attachments_mount_path
+              }
+            ]
+          }
+        ]
+        volumes = [
+          {
+            name = "esgfiles"
+            storageName = azurerm_container_app_environment_storage.esgfiles.name
+            storageType = "AzureFile"
+          }
+        
+        ]
+        scale = {
+          minReplicas = 1
+          maxReplicas = var.max_replicas
+        }
+      }
+    }
+  })
+  response_export_values = [ "properties.configuration.ingress.fqdn", "properties.outboundIpAddresses" ]
+  depends_on = [  azurerm_container_app_environment_storage.esgfiles,
+                  azurerm_postgresql_flexible_server_database.esgdb
+               ]
+}
 
 ### Job containers
 

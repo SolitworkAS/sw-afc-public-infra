@@ -213,3 +213,9 @@ variable "smtp_from" {
     error_message = "SMTP from address must be a valid email address"
   }
 }
+
+# Carbacc var
+
+variable "carbacc_url" {
+  description = "Carbacc url, must be a valid url (fully qualified domain name)"
+}
