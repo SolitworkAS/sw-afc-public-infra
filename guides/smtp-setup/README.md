@@ -11,10 +11,10 @@ This is a guide on how to create a compatible SMTP setup. By the end of the guid
   - [Part 2: Setting Up Managed Domain](#part-2-setting-up-managed-domain)
   - [Part 3: Connecting a Verified Email Domain](#part-3-connecting-a-verified-email-domain)
   - [Step 4: Registering an Application with Microsoft Entra ID and Creating a Service Principal](#step-4-registering-an-application-with-microsoft-entra-id-and-creating-a-service-principal)
-  - [Final Step: Using a Microsoft Entra Application with Azure Communication Services Resource for SMTP](#final-step-using-a-microsoft-entra-application-with-azure-communication-services-resource-for-smtp)
+  - [Step 5: Using a Microsoft Entra Application with Azure Communication Services Resource for SMTP](#step-5-using-a-microsoft-entra-application-with-azure-communication-services-resource-for-smtp)
     - [Creating a Custom Email Role for the Entra Application](#creating-a-custom-email-role-for-the-entra-application)
     - [Assigning Custom Email Role to Entra Application](#assigning-custom-email-role-to-entra-application)
-    - [Creating SMTP Credentials from Entra Application Information](#creating-smtp-credentials-from-entra-application-information)
+  - [Step 6: Creating SMTP Credentials from Entra Application Information](#step-6-creating-smtp-credentials-from-entra-application-information)
 
 # Part 1: Creating Email Communication Service Resource
 
@@ -88,19 +88,26 @@ This is a guide on how to create a compatible SMTP setup. By the end of the guid
 
 ## Part 3: Connecting a Verified Email Domain
 
-1. **Access Azure Communication Service Resource Overview:**
-   - Go to the Azure Communication Service Resource overview page.
+1. **Create Azure Communication Service Resource:**
+   - Navigate to your resource group where the communication email service was created
+   - Select Create
+   - Search for "Azure Communication Service"
+   ![Email Communication Services](./pics/section3/create-comm.png)
+   - Create the resource and give it a name
+
+2. **Access Azure Communication Service Resource Overview:**
+   - After creating the Azure Communication service, navigate to it and get to the overview page.
     ![Email Communication Services](./pics/section3/email-domains.png)
 
-2. **Navigate to Domains:**
+3. **Navigate to Domains:**
    - Click on "Domains" on the left navigation panel under Email.
 
-3. **Connect Verified Email Domain:**
+4. **Connect Verified Email Domain:**
    - Choose one of the following options:
      - **Option 1:** Click "Connect domain" in the upper navigation bar.
      - **Option 2:** Click "Connect domain" in the splash screen.
     ![Email Communication Services](./pics/section3/email-domains-connect.png)
-4. **Select Verified Domain:**
+5. **Select Verified Domain:**
    - Filter and select the verified domain based on:
      - Subscription
      - Resource Group
@@ -109,7 +116,7 @@ This is a guide on how to create a compatible SMTP setup. By the end of the guid
    - If you deployed an Azure domain, you'll likely have only one option displayed.
     ![Email Communication Services](./pics/section3/email-domains-connect-select.png)
    
-5. **Click Connect:**
+6. **Click Connect:**
    - After selecting the verified domain, click "Connect".
     ![Email Communication Services](./pics/section3/email-domains-connected.png)
 
@@ -124,7 +131,7 @@ This is a guide on how to create a compatible SMTP setup. By the end of the guid
 3. **Name and Configure Application:**
    - Name the application (e.g., "example-app").
    - Select a supported account type.
-   - Under Redirect URI, select "Web" and enter the URI where the access token is sent.
+   - Under Redirect URI, select "Web" and leave the uri field blank.
    - Click "Register".
     ![Email Communication Services](./pics/section4/create-app.png)
 
@@ -147,7 +154,7 @@ This is a guide on how to create a compatible SMTP setup. By the end of the guid
     ![Email Communication Services](./pics/section4/copy-secret.png)
 
 
-## Final Step: Using a Microsoft Entra Application with Azure Communication Services Resource for SMTP
+## Step 5: Using a Microsoft Entra Application with Azure Communication Services Resource for SMTP
 
 ### Creating a Custom Email Role for the Entra Application
 
@@ -193,20 +200,42 @@ This is a guide on how to create a compatible SMTP setup. By the end of the guid
    - Confirm the scope and members, then click "Review + assign".
      ![Email Communication Services](./pics/section5/email-smtp-select-assign.png)
 
-### Creating SMTP Credentials from Entra Application Information
+## Step 6: Creating SMTP Credentials from Entra Application Information
 
-- **SMTP Authentication Username:**
+   To be able to use these credentials for SMTP some adjustments need to be made.
+
+ 1. **SMTP Authentication Username:**
   - Construct the username using the following format:
     ```
     <Azure Communication Services Resource name>.<Entra Application ID>.<Entra Tenant ID>
     ```
-  - Use the Entra Application ID and Tenant ID along with the Azure Communication Services Resource name.
-  - Password: Use the secret created earlier.
+ 2. **SMTP Authentication Password:**
+  - Password: Use the secret created earlier for the app registration.
     ![Email Communication Services](./pics/section5/email-smtp-entra-secret.png)
 
-- **SMTP Server Details:**
-  - **Host:** smtp.azurecomm.net
-  - **Port:** 587
-  - **TLS / StartTLS:** Enabled
-  - **Mail_from** the email assigned to the role that manages the communication service
+ 3. **SMTP From:**
+  - Navigate to the resource group where the email communication service has been created
+   ![Email Communication Services](./pics/section2/email-add-azure-domain.png)
+  - Select provision domains page
+   ![Email Communication Services](./pics/section2/email-add-azure-domain-created.png)
+  - Click on the domain created earlier
+  - Select the mail from page
+   ![Email Communication Services](./pics/section5/mail-from.png)
+  - Copy the email address shown
+
+
+ 4. **Using the credentials:**
+   To use these credentials we need to navigate to the tfvars file and modify the following fields:
+
+   - smtp_from                   = smtp from as shown above
+   - smtp_host                   = "smtp.azurecomm.net"
+   - smtp_port                   = 587 
+   - smtp_username               = username as shown above
+   - smtp_password               = password as shown above
+
+ 5. **Deployment**
+    Update the tfvars file and run terraform apply to use the new SMTP setup
+
+
+
 
