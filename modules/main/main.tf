@@ -109,6 +109,9 @@ module "esg" {
   smtp_password = var.smtp_password
   smtp_from     = var.smtp_from
 
+  carbacc_included = var.include_carbacc
+  env_domain =  module.environment.default_domain
+
   depends_on = [module.environment]
 }
 

@@ -28,6 +28,9 @@ resource "azurerm_storage_share" "carbaccshare" {
   storage_account_name        = var.storage_account_name_carbacc
   quota                       = var.storage_quota
   access_tier                 = var.storage_access_tier
+  lifecycle { 
+  prevent_destroy = true
+  }
 }
 
 resource "azurerm_container_app_environment_storage" "carbaccfiles" {
@@ -37,6 +40,9 @@ resource "azurerm_container_app_environment_storage" "carbaccfiles" {
   share_name                   = azurerm_storage_share.carbaccshare.name
   access_key                   = var.storage_primary_access_key_carbacc
   access_mode                  = "ReadWrite"
+  lifecycle { 
+  prevent_destroy = true
+  }
   depends_on                   = [ azurerm_storage_share.carbaccshare]
 }
 

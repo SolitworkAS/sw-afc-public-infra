@@ -23,6 +23,15 @@ variable "location" {
   description = "location of the resource group, must be a valid Azure location"
 }
 
+variable "carbacc_included" {
+  description = "is carbacc included"
+  default = false
+}
+
+variable "env_domain" {
+  description = "The domain of the environment where the services a subdomains"
+}
+
 # SCALING VARIABLES
 variable "min_replicas" {
   default = 0

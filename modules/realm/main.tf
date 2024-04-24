@@ -13,6 +13,7 @@ resource "keycloak_realm" "realm" {
   login_theme = var.login_theme
   email_theme = "sw-custom-theme"
   default_signature_algorithm = "RS256"
+  sso_session_idle_timeout = "14400s"
 
   smtp_server {
     host = var.smtp_host
@@ -309,7 +310,11 @@ resource "keycloak_openid_client" "vat" {
   access_type         = "PUBLIC"
   web_origins = [ "+" ]
   valid_redirect_uris = [
-    "${var.vat_frontend_url}/*"
+    "${var.vat_frontend_url}/*",
+    "http://localhost*",
+    "http://localhost/*",
+    "http://localhost:4200*",
+    "http://localhost:4200/*"
   ]
   standard_flow_enabled = true
   implicit_flow_enabled = true
@@ -359,7 +364,11 @@ resource "keycloak_openid_client" "esg" {
 
   access_type         = "PUBLIC"
   valid_redirect_uris = [
-    "${var.esg_frontend_url}/*"
+    "${var.esg_frontend_url}/*",
+    "http://localhost*",
+    "http://localhost/*",
+    "http://localhost:4200*",
+    "http://localhost:4200/*"
   ]
   web_origins = [ "+" ]
 
@@ -409,7 +418,11 @@ resource "keycloak_openid_client" "carbacc" {
 
   access_type         = "PUBLIC"
   valid_redirect_uris = [
-    "${var.carbacc_frontend_url}/*"
+    "${var.carbacc_frontend_url}/*",
+    "http://localhost*",
+    "http://localhost/*",
+    "http://localhost:4200*",
+    "http://localhost:4200/*"
   ]
   web_origins = [ "+" ]
 

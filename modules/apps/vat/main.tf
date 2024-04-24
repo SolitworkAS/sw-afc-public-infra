@@ -39,6 +39,9 @@ resource "azurerm_storage_share" "vatshare" {
   storage_account_name        = var.storage_account_name_vat
   quota                       = var.storage_quota
   access_tier                 = var.storage_access_tier
+  lifecycle { 
+  prevent_destroy = true
+  }
 }
 
 resource "azurerm_container_app_environment_storage" "vatfiles" {
@@ -48,6 +51,9 @@ resource "azurerm_container_app_environment_storage" "vatfiles" {
   share_name                   = azurerm_storage_share.vatshare.name
   access_key                   = var.storage_primary_access_key_vat
   access_mode                  = "ReadWrite"
+  lifecycle { 
+  prevent_destroy = true
+  }
   depends_on                   = [ azurerm_storage_share.vatshare]
 }
 

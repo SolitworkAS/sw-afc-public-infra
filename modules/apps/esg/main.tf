@@ -54,6 +54,9 @@ resource "azurerm_storage_share" "esgshare" {
   storage_account_name        = var.storage_account_name_esg
   quota                       = var.storage_quota
   access_tier                 = var.storage_access_tier
+  lifecycle { 
+  prevent_destroy = true
+  }
 }
 
 resource "azurerm_container_app_environment_storage" "esgfiles" {
@@ -63,6 +66,9 @@ resource "azurerm_container_app_environment_storage" "esgfiles" {
   share_name                   = azurerm_storage_share.esgshare.name
   access_key                   = var.storage_primary_access_key_esg
   access_mode                  = "ReadWrite"
+  lifecycle { 
+  prevent_destroy = true
+  }
   depends_on                   = [ azurerm_storage_share.esgshare]
 }
 
@@ -308,6 +314,10 @@ resource "azapi_resource" "esg_frontend_service" {
       {
         name  = "SURVEY_MANAGER_API"
         value = "https://${jsondecode(azapi_resource.esg_survey_manager.output).properties.configuration.ingress.fqdn}"
+      },
+      {
+        name = "CARBACC_URL"
+        value = var.carbacc_included? "https://carbacc-frontend-service.${var.env_domain}" : ""
       },
       {
         name = "RBMQ_HOST"

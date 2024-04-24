@@ -44,6 +44,9 @@ resource "azurerm_postgresql_flexible_server" "postgres" {
   backup_retention_days       = 30
   storage_mb                  = var.database_storage
   sku_name                    = var.database_sku
+  lifecycle { 
+  prevent_destroy = true
+  }
   depends_on                  = [azurerm_resource_group.rg]
 }
 
@@ -65,6 +68,9 @@ resource "azurerm_storage_account" "storage" {
       days = 30
     }
   }
+  lifecycle { 
+  prevent_destroy = true
+  }
   depends_on = [azurerm_resource_group.rg]
 }
 
@@ -75,6 +81,9 @@ resource "azurerm_recovery_services_vault" "swsharebackupvault" {
   resource_group_name         = azurerm_resource_group.rg.name
   sku                         = "Standard"
   depends_on                  = [azurerm_resource_group.rg]
+  lifecycle { 
+  prevent_destroy = true
+  }
 }
 
 # Create a backup policy
@@ -90,6 +99,9 @@ resource "azurerm_backup_policy_file_share" "swsharebackuppolicy" {
 
   retention_daily {
     count                     = 30
+  }
+  lifecycle { 
+  prevent_destroy = true
   }
   depends_on                  = [azurerm_resource_group.rg, azurerm_recovery_services_vault.swsharebackupvault]
 }
@@ -120,6 +132,9 @@ resource "azurerm_postgresql_flexible_server_database" "keycloakdb" {
   name                        = local.keycloakdb
   collation                   = "en_US.utf8"
   charset                     = "UTF8"
+  lifecycle { 
+  prevent_destroy = true
+  }
   depends_on                  = [azurerm_resource_group.rg, azurerm_postgresql_flexible_server.postgres]
 }
 
@@ -301,8 +316,8 @@ resource "azurerm_postgresql_flexible_server_firewall_rule" "keycloak-postgres-f
 resource "azurerm_postgresql_flexible_server_firewall_rule" "solitwork-postgres-fw" {
   name             = "solitwork-postgres-fw"
   server_id        = azurerm_postgresql_flexible_server.postgres.id
-  start_ip_address = "83.93.235.234"
-  end_ip_address   = "83.93.235.234"
+  start_ip_address = "152.115.169.50"
+  end_ip_address   = "152.115.169.50"
   depends_on = [azurerm_postgresql_flexible_server.postgres]
 }
 
