@@ -57,6 +57,15 @@ resource "azurerm_container_app_environment_storage" "vatfiles" {
   depends_on                   = [ azurerm_storage_share.vatshare]
 }
 
+resource "azurerm_backup_protected_file_share" "vatprotectedfileshare" {
+  resource_group_name = var.resource_group_name
+  recovery_vault_name = var.recovery_vault_name
+  source_file_share_name = azurerm_storage_share.vatshare.name
+  source_storage_account_id = var.source_storage_account_id
+  backup_policy_id = var.backup_policy_id
+  depends_on = [ azurerm_container_app_environment_storage.vatfiles, azurerm_storage_share.vatshare]
+}
+
 # Create a container app for the VAT processor
 resource "azurerm_container_app" "vat_processor" {
   name = local.vat_processor_name

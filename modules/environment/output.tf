@@ -48,3 +48,19 @@ output "rabbitmq_name" {
 output "default_domain"{
   value = azurerm_container_app_environment.sw-aca.default_domain
 }
+
+output "storage_account_id" {
+  value = azurerm_storage_account.storage.id
+}
+
+output "backup_policy_id" {
+  value = azurerm_backup_policy_file_share.swsharebackuppolicy.id
+  }
+
+output "recovery_vault_name" {
+  value = azurerm_recovery_services_vault.swsharebackupvault.name
+}  
+
+output "source_storage_account_id" {
+  value = azurerm_backup_container_storage_account.sw-protection-container.storage_account_id
+}

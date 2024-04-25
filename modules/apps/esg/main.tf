@@ -72,6 +72,16 @@ resource "azurerm_container_app_environment_storage" "esgfiles" {
   depends_on                   = [ azurerm_storage_share.esgshare]
 }
 
+resource "azurerm_backup_protected_file_share" "esgprotectedfileshare" {
+  resource_group_name = var.resource_group_name
+  recovery_vault_name = var.recovery_vault_name
+  source_file_share_name = azurerm_storage_share.esgshare.name
+  source_storage_account_id = var.source_storage_account_id
+  backup_policy_id = var.backup_policy_id
+  depends_on = [ azurerm_container_app_environment_storage.esgfiles, azurerm_storage_share.esgshare]
+}
+
+
 resource "azapi_resource" "esg_notification_manager" {
   type = "Microsoft.App/containerApps@2023-05-01"
   name = local.esg_notification_manager_name

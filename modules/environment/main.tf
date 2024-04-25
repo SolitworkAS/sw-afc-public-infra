@@ -30,6 +30,9 @@ locals {
 resource "azurerm_resource_group" "rg" {
   name                        = var.resource_group_name
   location                    = var.location
+  tags = {
+    "Managed_By" = "Terraform-Cloud"
+  }
 }
 
 # Create a PostgreSQL Flexible Server
@@ -104,6 +107,12 @@ resource "azurerm_backup_policy_file_share" "swsharebackuppolicy" {
   prevent_destroy = true
   }
   depends_on                  = [azurerm_resource_group.rg, azurerm_recovery_services_vault.swsharebackupvault]
+}
+
+resource "azurerm_backup_container_storage_account" "sw-protection-container" {
+  resource_group_name = var.resource_group_name
+  recovery_vault_name = azurerm_recovery_services_vault.swsharebackupvault.name
+  storage_account_id  = azurerm_storage_account.storage.id
 }
 
 # Create the log analytics workspace

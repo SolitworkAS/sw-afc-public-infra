@@ -45,6 +45,10 @@ module "carbacc" {
 
   storage_account_name_carbacc       = module.environment.storage_account_name
   storage_primary_access_key_carbacc = module.environment.storage_primary_access_key
+  backup_policy_id = module.environment.backup_policy_id
+  storage_account_id = module.environment.storage_account_id
+  recovery_vault_name = module.environment.recovery_vault_name
+  source_storage_account_id = module.environment.source_storage_account_id
 
   rabbitmq_image    = var.rabbitmq_image
   rabbitmq_user     = var.rabbitmq_user
@@ -86,6 +90,10 @@ module "esg" {
 
   storage_account_name_esg       = module.environment.storage_account_name
   storage_primary_access_key_esg = module.environment.storage_primary_access_key
+  backup_policy_id = module.environment.backup_policy_id
+  storage_account_id = module.environment.storage_account_id
+  recovery_vault_name = module.environment.recovery_vault_name
+  source_storage_account_id = module.environment.source_storage_account_id
 
   rabbitmq_image    = var.rabbitmq_image
   rabbitmq_user     = var.rabbitmq_user
@@ -136,6 +144,10 @@ module "vat" {
 
   storage_account_name_vat       = module.environment.storage_account_name
   storage_primary_access_key_vat = module.environment.storage_primary_access_key
+  backup_policy_id = module.environment.backup_policy_id
+  storage_account_id = module.environment.storage_account_id
+  recovery_vault_name = module.environment.recovery_vault_name
+  source_storage_account_id = module.environment.source_storage_account_id
 
   rabbitmq_image    = var.rabbitmq_image
   rabbitmq_user     = var.rabbitmq_user

@@ -78,6 +78,30 @@ variable "storage_primary_access_key_esg" {
   description = "storage primary access key, must not be empty"
 }
 
+# STORAGE CONTAINER VARIABLES
+
+variable "backup_policy_id" {
+  description = "id of the backup policy, must be a valid Azure resource id"
+}
+
+variable "storage_account_id" {
+  description = "id of the storage account, must be a valid Azure resource id"
+  
+}
+
+variable "recovery_vault_name" {
+  description = "name of the recovery vault, must only contain lowercase letters, numbers and dashes"
+  validation {
+    condition = can(regex("^[a-z0-9-]+$", var.recovery_vault_name))
+    error_message = "recovery_vault_name must only contain lowercase letters, numbers and dashes"
+  }
+  
+}
+
+variable "source_storage_account_id" {
+  description = "id of the source storage account, must be a valid Azure resource id"
+  
+}
 # CONTAINER REGISTRY VARIABLES
 variable "container_registry" {
   default = "imagesdevregistry.azurecr.io"
