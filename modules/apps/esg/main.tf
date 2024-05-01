@@ -936,7 +936,7 @@ resource "azapi_resource" "esg_survey_manager" {
       ,
       {
         name  = "JOB_SURVEY_MANAGER_HOST"
-        value = "https://esg-job-survey-manager.${var.default_domain}"
+        value = "https://esg-survey-manager.${var.env_domain}"
       }
       ,
       {
@@ -1052,10 +1052,9 @@ resource "azapi_resource" "esg_survey_manager" {
         value = var.keycloak_client_id_esg
       },
       {
-        name  = "JOB_SURVEY_MANAGER_HOST"
-        value = "https://esg-job-survey-manager.${var.default_domain}"
-      }
-      ,
+            name  = "JOB_SURVEY_MANAGER_HOST"
+            value = "https://esg-survey-manager.${var.env_domain}"
+      },
       {
         name  = "JOB_ADMIN_USERNAME"
         value = "reporting@solitwork.com"
@@ -1570,7 +1569,7 @@ resource "azapi_resource" "esg-job-schedulations" {
           ,
           {
             name  = "JOB_SURVEY_MANAGER_HOST"
-            value = "https://esg-job-survey-manager.${var.default_domain}"
+            value = "https://${jsondecode(azapi_resource.esg_survey_manager.output).properties.configuration.ingress.fqdn}"
           }
           ,
           {
@@ -1716,7 +1715,7 @@ resource "azapi_resource" "esg-job-notifications" {
           ,
           {
             name  = "JOB_SURVEY_MANAGER_HOST"
-            value = "https://esg-job-survey-manager.${var.default_domain}"
+            value = "https://${jsondecode(azapi_resource.esg_survey_manager.output).properties.configuration.ingress.fqdn}"
           }
           ,
           {
