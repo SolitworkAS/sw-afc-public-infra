@@ -120,6 +120,10 @@ resource "azapi_resource" "carbacc_frontend_service" {
         value = var.keycloak_client_id
       },
       {
+        name = "ESG_URL"
+        value = "https://esg-frontend-service.${var.default_domain}"
+      },
+      {
         name  = "taskManagementUrl"
         value = "https://${jsondecode(azapi_resource.carbacc_taskmanagement_service.output).properties.configuration.ingress.fqdn}"
       },

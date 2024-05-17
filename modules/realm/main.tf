@@ -30,6 +30,33 @@ resource "keycloak_realm" "realm" {
   }
 }
 
+# Events
+
+resource "keycloak_realm_events" "realm_events" {
+  realm_id = keycloak_realm.realm.id
+
+  events_enabled    = true
+  events_expiration = 15552000 # 180 days expiration time
+
+  admin_events_enabled         = true
+  admin_events_details_enabled = true
+
+}
+
+resource "keycloak_realm_events" "realm_events_master" {
+  realm_id = "master"
+
+  events_enabled    = true
+  events_expiration = 15552000 # 180 days expiration time
+
+  admin_events_enabled         = true
+  admin_events_details_enabled = true
+
+}
+
+
+
+
 # Roles
 data "keycloak_openid_client" "realm_management" {
   realm_id  = keycloak_realm.realm.id
