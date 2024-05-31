@@ -113,6 +113,14 @@ variable "rabbitmq_password" {
   }
 }
 
+# Container Variables
+variable "min_cpu" {
+  description = "minimum cpu"
+}
+variable "min_memory" {
+  description = "minimum memory"
+}
+
 
 # KEYCLOAK VARIABLES
 variable "keycloak_admin_user" {

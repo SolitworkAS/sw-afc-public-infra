@@ -12,6 +12,8 @@ module "environment" {
   container_registry          = var.container_registry
   container_registry_username = var.container_registry_username
   container_registry_password = var.container_registry_password
+  min_cpu = var.min_cpu
+  min_memory = var.min_memory
   database_sku                = var.database_sku
   database_storage            = var.database_storage
   database_user               = var.database_user
@@ -32,18 +34,23 @@ module "carbacc" {
   location            = var.location
   resource_group_name = local.resource_group_name
   resource_group_id   = module.environment.resource_group_id
+  
 
   container_app_environment_id = module.environment.container_app_environment_id
 
 
   min_replicas = var.min_replicas
   max_replicas = var.max_replicas
+  min_cpu = var.min_cpu
+  min_memory = var.min_memory
 
   container_registry          = var.container_registry
   container_registry_username = var.container_registry_username
   container_registry_password = var.container_registry_password
 
   storage_account_name_carbacc       = module.environment.storage_account_name
+  storage_access_tier = var.storage_access_tier
+  storage_quota = var.storage_quota
   storage_primary_access_key_carbacc = module.environment.storage_primary_access_key
   backup_policy_id = module.environment.backup_policy_id
   storage_account_id = module.environment.storage_account_id
@@ -80,7 +87,6 @@ module "esg" {
 
   container_app_environment_id = module.environment.container_app_environment_id
 
-
   min_replicas = var.min_replicas
   max_replicas = var.max_replicas
 
@@ -90,6 +96,8 @@ module "esg" {
 
   storage_account_name_esg       = module.environment.storage_account_name
   storage_primary_access_key_esg = module.environment.storage_primary_access_key
+  storage_access_tier = var.storage_access_tier
+  storage_quota = var.storage_quota
   backup_policy_id = module.environment.backup_policy_id
   storage_account_id = module.environment.storage_account_id
   recovery_vault_name = module.environment.recovery_vault_name
@@ -105,6 +113,8 @@ module "esg" {
   database_password   = var.database_password
   reportingpassword   = var.reportingpassword
   rabbitmq_host       = module.environment.rabbitmq_name
+  min_cpu = var.min_cpu
+  min_memory = var.min_memory
 
   keycloak_realm = var.customer
   keycloak_url = module.environment.keycloak_url
@@ -144,6 +154,8 @@ module "vat" {
 
   storage_account_name_vat       = module.environment.storage_account_name
   storage_primary_access_key_vat = module.environment.storage_primary_access_key
+  storage_access_tier = var.storage_access_tier
+  storage_quota = var.storage_quota
   backup_policy_id = module.environment.backup_policy_id
   storage_account_id = module.environment.storage_account_id
   recovery_vault_name = module.environment.recovery_vault_name

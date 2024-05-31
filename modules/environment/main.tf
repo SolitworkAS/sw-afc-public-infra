@@ -196,8 +196,8 @@ resource "azapi_resource" "keycloak" {
             name = "keycloak"
             image = local.keycloak_image
             resources = {
-                cpu = 0.5
-                memory = "1Gi"
+                cpu = var.min_cpu
+                memory = var.min_memory
             }
             env = [
               {
@@ -281,8 +281,8 @@ resource "azapi_resource" "rabbitmq" {
             name = "rabbitmq"
             image = var.rabbitmq_image
             resources = {
-                cpu = 0.5
-                memory = "1Gi"
+                cpu = var.min_cpu
+                memory = var.min_memory
             }
             env = [
               {

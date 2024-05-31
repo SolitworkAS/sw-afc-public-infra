@@ -73,6 +73,19 @@ variable "container_registry_password" {
   }
 }
 
+# CONTAINER VARIABLES
+
+variable "min_cpu" {
+  default     = 0.50
+  description = "minimum cpu"
+}
+
+variable "min_memory" {
+  default     = "1Gi"
+  description = "minimum memory"
+}
+
+
 # DATABASE VARIABLES
 variable "database_sku" {
   default     = "B_Standard_B2s"
@@ -206,5 +219,23 @@ variable "app_admin_last_name" {
   description = "Application admin last name"
 }
 
+variable "storage_quota" {
+  default = 100
+  description = "storage quota in GB, must be a number"
+  validation {
+    condition = can(regex("^[0-9]+$", var.storage_quota))
+    error_message = "storage_quota must be a number"
+  }
+}
+variable "storage_access_tier" {
+  default = "Hot"
+  description = "storage access tier, must be a valid Azure storage access tier"
+  validation {
+    condition = can(regex("^(Hot|Cool)$", var.storage_access_tier))
+    error_message = "storage_access_tier must be a valid Azure storage access tier"
+  }
+}
+
+## END OF VARIABLES ##
 
 

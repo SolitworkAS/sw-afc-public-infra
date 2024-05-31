@@ -19,10 +19,15 @@ module "main" {
   container_registry_username = var.container_registry_username
   container_registry_password = var.container_registry_password
 
+  min_cpu = var.min_cpu
+  min_memory = var.min_memory
+
   app_admin_email            = var.app_admin_email
   app_admin_first_name       = var.app_admin_first_name
   app_admin_last_name        = var.app_admin_last_name
   app_admin_initial_password = var.app_admin_initial_password
+  storage_access_tier = var.storage_access_tier
+  storage_quota = var.storage_quota
 
 
   location         = var.location

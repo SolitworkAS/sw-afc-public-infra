@@ -183,6 +183,18 @@ variable "max_replicas" {
     error_message = "max_replicas must be a number"
   }
 }
+
+# Container Variables
+
+variable "min_cpu" {
+  description = "minimum cpu"
+}
+
+variable "min_memory" {
+  description = "minimum memory"
+}
+
+
 # SMTP VARIABLES
 variable "smtp_host" {
   description = "SMTP host"
@@ -232,6 +244,23 @@ variable "app_admin_first_name" {
 
 variable "app_admin_last_name" {
   description = "Application admin last name"
+}
+
+variable "storage_quota" {
+  default = 100
+  description = "storage quota in GB, must be a number"
+  validation {
+    condition = can(regex("^[0-9]+$", var.storage_quota))
+    error_message = "storage_quota must be a number"
+  }
+}
+variable "storage_access_tier" {
+  default = "Hot"
+  description = "storage access tier, must be a valid Azure storage access tier"
+  validation {
+    condition = can(regex("^(Hot|Cool)$", var.storage_access_tier))
+    error_message = "storage_access_tier must be a valid Azure storage access tier"
+  }
 }
 
 

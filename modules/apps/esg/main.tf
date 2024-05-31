@@ -131,7 +131,8 @@ resource "azapi_resource" "esg_notification_manager" {
           ]
           corsPolicy = {
                     allowedOrigins = [
-                        "https://esg-frontend-service.${var.default_domain}"
+                        "https://esg-frontend-service.${var.default_domain}",
+                        "https://${var.customer}.afcdemo.com"
                     ],
                     allowedMethods = [
                         "*"
@@ -154,8 +155,8 @@ resource "azapi_resource" "esg_notification_manager" {
             name = "esg-notification-manager"
             image = local.esg_notification_manager_image
             resources = {
-              cpu = 1
-              memory = "2Gi"
+              cpu = var.min_cpu
+              memory = var.min_memory
             }
             env = [
               {
@@ -297,8 +298,8 @@ resource "azapi_resource" "esg_frontend_service" {
             name = "esg-frontend-service"
             image = local.esg_frontend_image
             resources = {
-              cpu = 1
-              memory = "2Gi"
+              cpu = var.min_cpu
+              memory = var.min_memory
             }
             env = [
       {
@@ -423,7 +424,8 @@ resource "azapi_resource" "esg_reporting_manager" {
           ]
           corsPolicy = {
                     allowedOrigins = [
-                        "https://esg-frontend-service.${var.default_domain}"
+                        "https://esg-frontend-service.${var.default_domain}",
+                        "https://${var.customer}.afcdemo.com"
                     ],
                     allowedMethods = [
                         "*"
@@ -445,8 +447,8 @@ resource "azapi_resource" "esg_reporting_manager" {
             name = "esg-reporting-manager"
             image = local.esg_reporting_manager_image
             resources = {
-              cpu = 1
-              memory = "2Gi"
+              cpu = var.min_cpu
+              memory = var.min_memory
             }
             env = [
               {
@@ -583,7 +585,8 @@ resource "azapi_resource" "esg_user_management" {
           ]
            corsPolicy = {
                     allowedOrigins = [
-                        "https://esg-frontend-service.${var.default_domain}"
+                        "https://esg-frontend-service.${var.default_domain}",
+                        "https://${var.customer}.afcdemo.com"
                     ],
                     allowedMethods = [
                         "*"
@@ -605,8 +608,8 @@ resource "azapi_resource" "esg_user_management" {
             name = "esg-user-management"
             image = local.esg_user_management_image
             resources = {
-              cpu = 1
-              memory = "2Gi"
+              cpu = var.min_cpu
+              memory = var.min_memory
             }
             env = [
               {
@@ -699,8 +702,8 @@ resource "azapi_resource" "esg_user_management" {
             name = "esg-user-management-init"
             image = local.esg_user_management_init
             resources = {
-              cpu = 0.25
-              memory = "0.5Gi"
+              cpu = var.min_cpu
+              memory = var.min_memory
             }
             env = [
               {
@@ -835,7 +838,8 @@ resource "azapi_resource" "esg_survey_manager" {
           ]
            corsPolicy = {
                     allowedOrigins = [
-                        "https://esg-frontend-service.${var.default_domain}"
+                        "https://esg-frontend-service.${var.default_domain}",
+                        "https://${var.customer}.afcdemo.com"
                     ],
                     allowedMethods = [
                         "*"
@@ -857,8 +861,8 @@ resource "azapi_resource" "esg_survey_manager" {
             name = "esg-survey-manager"
             image = local.esg_survey_manager_image
             resources = {
-              cpu = 1
-              memory = "2Gi"
+              cpu = var.min_cpu
+              memory = var.min_memory
             }
             env = [
               {
@@ -975,8 +979,8 @@ resource "azapi_resource" "esg_survey_manager" {
             name = "esg-survey-manager-init"
             image = local.esg_survey_manager_init_image
             resources = {
-              cpu = 0.25
-              memory = "0.5Gi"
+              cpu = var.min_cpu
+              memory = var.min_memory
             }
             env = [
               {
@@ -1115,7 +1119,8 @@ resource "azapi_resource" "esg_organization_module" {
           ]
            corsPolicy = {
                     allowedOrigins = [
-                        "https://esg-frontend-service.${var.default_domain}"
+                        "https://esg-frontend-service.${var.default_domain}",
+                        "https://${var.customer}.afcdemo.com"
                     ],
                     allowedMethods = [
                         "*"
@@ -1137,8 +1142,8 @@ resource "azapi_resource" "esg_organization_module" {
             name = "esg-organization-module"
             image = local.esg_organization_module_image
             resources = {
-              cpu = 1
-              memory = "2Gi"
+              cpu = var.min_cpu
+              memory = var.min_memory
             }
             env = [
               {
@@ -1231,8 +1236,8 @@ resource "azapi_resource" "esg_organization_module" {
             name = "esg-organization-module-init"
             image = local.esg_organization_module_init_image
             resources = {
-              cpu = 0.25
-              memory = "0.5Gi"
+              cpu = var.min_cpu
+              memory = var.min_memory
             }
             env = [
               {
@@ -1490,8 +1495,8 @@ resource "azapi_resource" "esg-job-schedulations" {
             image = local.esg_job_schedulation_image
             name = "esg-job-schedulation"
             resources = {
-              cpu = 0.25
-              memory = "0.5Gi"
+              cpu = var.min_cpu
+              memory = var.min_memory
             }
             env = [
           {
@@ -1731,8 +1736,8 @@ resource "azapi_resource" "esg-job-notifications" {
             image = local.esg_job_notification_image
             name = local.esg_job_notification_name
             resources = {
-              cpu = 0.25
-              memory = "0.5Gi"
+              cpu = var.min_cpu
+              memory = var.min_memory
             }
           }
         ]

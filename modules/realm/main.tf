@@ -338,6 +338,7 @@ resource "keycloak_openid_client" "vat" {
   web_origins = [ "+" ]
   valid_redirect_uris = [
     "${var.vat_frontend_url}/*",
+    "https://${var.realm_name}.afcdemo.com/*",
     "http://localhost*",
     "http://localhost/*",
     "http://localhost:4200*",
@@ -392,6 +393,7 @@ resource "keycloak_openid_client" "esg" {
   access_type         = "PUBLIC"
   valid_redirect_uris = [
     "${var.esg_frontend_url}/*",
+    "https://${var.realm_name}.afcdemo.com/*",
     "http://localhost*",
     "http://localhost/*",
     "http://localhost:4200*",
@@ -446,6 +448,7 @@ resource "keycloak_openid_client" "carbacc" {
   access_type         = "PUBLIC"
   valid_redirect_uris = [
     "${var.carbacc_frontend_url}/*",
+    "https://${var.realm_name}.afcdemo.com/*",
     "http://localhost*",
     "http://localhost/*",
     "http://localhost:4200*",

@@ -37,22 +37,6 @@ Example:
 "123456","source-system","Company A",,"DKK","1234.5","2022-11-01","Some Category",,,,,,,
 ```
 
-### How to save an Excel spreadsheet as a csv file:
-To ensure your Excel file is saved in the right format:
-
-1. **Save your Excel file as CSV (Comma delimited).**
-   
-   ![Save Excel File as CSV](pics/Save_excel_as_csv.png)
-3. **To ensure the CSV file is using the correct UTF-8 encoding (as different versions of Excel may use different encodings by default), please follow these steps:**
-   - Open the saved CSV file in Notepad.
-   - In Notepad, click on `File` -> `Save As`.
-   - In the `Save as type` dropdown, select `All Files`.
-   - In the `Encoding` dropdown, select `UTF-8`.
-     
-     ![Choose Right Type and Encoder](pics/csv-file-right-encoder.png)
-   
-   - Save the file.
-
 An example file is available here: [example.csv](example.csv)
 
 

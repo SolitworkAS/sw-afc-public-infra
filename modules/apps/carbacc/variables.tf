@@ -215,3 +215,12 @@ variable "reportingpassword" {
 variable "default_domain"{
   description = "default domain"
 }
+
+variable "min_cpu" {
+  description = "minimum cpu"
+  
+}
+
+variable "min_memory" {
+  description = "minimum memory"
+}

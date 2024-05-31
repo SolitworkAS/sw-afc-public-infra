@@ -103,8 +103,8 @@ resource "azapi_resource" "carbacc_frontend_service" {
             name = "carbacc-frontend-service"
             image = local.carbacc_frontend_image
             resources = {
-              cpu = 1
-              memory = "2Gi"
+              cpu = var.min_cpu
+              memory = var.min_memory
             }
             env = [
       {
@@ -201,7 +201,8 @@ resource "azapi_resource" "carbacc_taskmanagement_service" {
           ]
            corsPolicy = {
                     allowedOrigins = [
-                        "https://carbacc-frontend-service.${var.default_domain}"
+                        "https://carbacc-frontend-service.${var.default_domain}",
+                        "https://${var.customer}.afcdemo.com"
                     ],
                     allowedMethods = [
                         "*"
@@ -223,8 +224,8 @@ resource "azapi_resource" "carbacc_taskmanagement_service" {
             name = "carbacc-taskmanagement-service"
             image = local.carbacc_taskmanagement_service_image
             resources = {
-              cpu = 1
-              memory = "2Gi"
+              cpu = var.min_cpu
+              memory = var.min_memory
             }
             env = [
       {
@@ -349,7 +350,8 @@ resource "azapi_resource" "carbacc_sourceload_service" {
           ]
           corsPolicy = {
                     allowedOrigins = [
-                        "https://carbacc-frontend-service.${var.default_domain}"
+                        "https://carbacc-frontend-service.${var.default_domain}",
+                        "https://${var.customer}.afcdemo.com"
                     ],
                     allowedMethods = [
                         "*"
@@ -371,8 +373,8 @@ resource "azapi_resource" "carbacc_sourceload_service" {
             name = "carbacc-sourceload-service"
             image = local.carbacc_sourceload_service_image
             resources = {
-              cpu = 1
-              memory = "2Gi"
+              cpu = var.min_cpu
+              memory = var.min_memory
             }
             env = [
       {
