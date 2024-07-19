@@ -24,6 +24,10 @@ locals {
   transaction_processed_queue = "vat-vattransaction-queue"
   queue_chunk_size            = "10000"
   config_timeout_minutes      = "5"
+
+  # Audit trail configuration
+  audit_trail_image = "${var.container_registry}/images/audit-trail/audit_logger_service:${var.audit_version}"
+  audit_log_mount_path = "/code/AuditLogs"
 }
 
 # Create a resource group
@@ -328,5 +332,141 @@ resource "azurerm_postgresql_flexible_server_firewall_rule" "solitwork-postgres-
   start_ip_address = "152.115.169.50"
   end_ip_address   = "152.115.169.50"
   depends_on = [azurerm_postgresql_flexible_server.postgres]
+}
+
+# Audit Trail Service
+
+
+resource "azurerm_storage_share" "audit_share" {
+  name                        = "audit-share"
+  storage_account_name        = azurerm_storage_account.storage.name
+  quota                       = var.storage_quota
+  access_tier                 = var.storage_access_tier
+}
+
+resource "azurerm_container_app_environment_storage" "audit_files" {
+  name                         = "audit-files"
+  container_app_environment_id = azurerm_container_app_environment.sw-aca.id
+  account_name                 = azurerm_storage_account.storage.name
+  share_name                   = azurerm_storage_share.audit_share.name
+  access_key                   = azurerm_storage_account.storage.primary_access_key
+  access_mode                  = "ReadWrite"
+  depends_on                   = [ azurerm_storage_share.audit_share]
+}
+
+resource "azapi_resource" "audit_api" {
+  type = "Microsoft.App/containerApps@2023-05-01"
+  name = "audit-trail-service"
+  parent_id = azurerm_resource_group.rg.id
+  location = var.location
+  body = jsonencode({
+    properties = {
+      configuration = {
+        secrets = [
+          {
+            name = "rabbitmqpassword"
+            value = var.rabbitmq_password
+          },
+          {
+            name = "containerregistrypassword"
+            value = var.container_registry_password
+          }
+        ]
+        registries = [
+          {
+            server = var.container_registry
+            username = var.container_registry_username
+            passwordSecretRef = "containerregistrypassword"
+          }
+        ]
+        ingress = {
+          external = true
+          targetPort = 80
+          traffic = [
+            {
+              latestRevision = true
+              weight = 100
+            }
+          ]
+        }
+        activeRevisionsMode = "Single"
+      }
+      environmentId = azurerm_container_app_environment.sw-aca.id
+      template = {
+        containers = [
+          {
+            name = "audit-trail-service"
+            image = local.audit_trail_image
+            resources = {
+              cpu = var.min_cpu
+              memory = var.min_memory
+            }
+            env = [
+              {
+        name  = "LOG_LEVEL"
+        value = "INFO"
+      },
+      {
+        name  = "VERSION"
+        value = var.audit_version
+      },
+      {
+        name  = "API_PATH"
+        value = "/"
+      },
+      {
+        name  = "SWAGGER_DOCS"
+        value = "True"
+      },
+      {
+        name = "RBMQ_HOST"
+        value = azapi_resource.rabbitmq.name
+      },
+      {
+        name = "RBMQ_PORT"
+        value = "5672"
+      },
+      {
+        name = "RBMQ_VHOST"
+        value = var.customer
+      },
+      {
+        name = "RBMQ_USER"
+        value = var.rabbitmq_user
+      },
+      {
+        name = "RBMQ_PASSWORD"
+        secretRef = "rabbitmqpassword"
+      },
+      {
+        name = "LOG_FOLDER_PATH"
+        value = "AuditLogs"
+      },
+
+            ]
+            volumeMounts = [
+              {
+                volumeName = "auditfiles"
+                mountPath = local.audit_log_mount_path
+              }
+            ]
+          }
+        ]
+        volumes = [
+          {
+            name = "auditfiles"
+            storageName = azurerm_container_app_environment_storage.audit_files.name
+            storageType = "AzureFile"
+          }
+        ]
+        scale = {
+          minReplicas = var.min_replicas
+          maxReplicas = var.max_replicas
+        }
+      }
+    }
+  })
+  response_export_values = [ "properties.configuration.ingress.fqdn", "properties.outboundIpAddresses" ]
+  depends_on = [ azurerm_storage_account.storage, azurerm_resource_group.rg, azurerm_container_app_environment_storage.audit_files]
 }
 

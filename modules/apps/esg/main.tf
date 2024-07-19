@@ -21,7 +21,12 @@ locals {
   esg_survey_manager_name  = "esg-survey-manager"
   esg_survey_manager_image = "${var.container_registry}/images/esg/survey_manager:${var.esg_version}"
   esg_survey_manager_init_image  = "${var.container_registry}/images/esg/survey_manager_init:${var.esg_version}"
-  
+  # ESG Disclosure Management
+  esg_disclosure_management_name  = "esg-disclosure-management"
+  esg_disclosure_management_image = "${var.container_registry}/images/esg/disclosure_management:${var.esg_version}"
+  esg_disclosure_management_init_image  = "${var.container_registry}/images/esg/disclosure_management_init:${var.esg_version}"
+
+
   # CSV service
 
   esg_csv_service_name  = "esg-csv-service"
@@ -132,6 +137,7 @@ resource "azapi_resource" "esg_notification_manager" {
           corsPolicy = {
                     allowedOrigins = [
                         "https://esg-frontend-service.${var.default_domain}",
+                        "https://${var.customer}.afcsoftware.com",
                         "https://${var.customer}.afcdemo.com"
                     ],
                     allowedMethods = [
@@ -327,6 +333,10 @@ resource "azapi_resource" "esg_frontend_service" {
         value = "https://${jsondecode(azapi_resource.esg_survey_manager.output).properties.configuration.ingress.fqdn}"
       },
       {
+        name  = "DISCLOSURE_MANAGEMENT_API"
+        value = "https://${jsondecode(azapi_resource.esg_disclosure_management.output).properties.configuration.ingress.fqdn}"
+      },
+      {
         name = "CARBACC_URL"
         value = var.carbacc_included? "https://carbacc-frontend-service.${var.env_domain}" : ""
       },
@@ -425,6 +435,7 @@ resource "azapi_resource" "esg_reporting_manager" {
           corsPolicy = {
                     allowedOrigins = [
                         "https://esg-frontend-service.${var.default_domain}",
+                        "https://${var.customer}.afcsoftware.com",
                         "https://${var.customer}.afcdemo.com"
                     ],
                     allowedMethods = [
@@ -586,6 +597,7 @@ resource "azapi_resource" "esg_user_management" {
            corsPolicy = {
                     allowedOrigins = [
                         "https://esg-frontend-service.${var.default_domain}",
+                        "https://${var.customer}.afcsoftware.com",
                         "https://${var.customer}.afcdemo.com"
                     ],
                     allowedMethods = [
@@ -839,6 +851,7 @@ resource "azapi_resource" "esg_survey_manager" {
            corsPolicy = {
                     allowedOrigins = [
                         "https://esg-frontend-service.${var.default_domain}",
+                        "https://${var.customer}.afcsoftware.com",
                         "https://${var.customer}.afcdemo.com"
                     ],
                     allowedMethods = [
@@ -1079,6 +1092,269 @@ resource "azapi_resource" "esg_survey_manager" {
                ]
 }
 
+resource "azapi_resource" "esg_disclosure_management" {
+  type = "Microsoft.App/containerApps@2023-05-01"
+  name = local.esg_disclosure_management_name
+  parent_id = var.resource_group_id
+  location = var.location
+  body = jsonencode({
+    properties = {
+      configuration = {
+        secrets = [
+          {
+            name = "rabbitmqpassword"
+            value = var.rabbitmq_password
+          },
+          {
+            name = "databasepassword"
+            value = var.database_password
+          },
+          {
+            name = "containerregistrypassword"
+            value = var.container_registry_password
+          },
+          {
+            name = "containerregistrypassword"
+            value = var.container_registry_password
+          },
+          {
+            name = "reportingpassword"
+            value = var.reportingpassword
+          }
+        ]
+        registries = [
+          {
+            server = var.container_registry
+            username = var.container_registry_username
+            passwordSecretRef = "containerregistrypassword"
+          }
+        ]
+        ingress = {
+          external = true
+          targetPort = 80
+          traffic = [
+            {
+              latestRevision = true
+              weight = 100
+            }
+          ]
+           corsPolicy = {
+                    allowedOrigins = [
+                        "https://esg-frontend-service.${var.default_domain}",
+                        "https://${var.customer}.afcsoftware.com",
+                        "https://${var.customer}.afcdemo.com"
+                    ],
+                    allowedMethods = [
+                        "*"
+                    ],
+                    allowedHeaders = [
+                        "*"
+                    ],
+                    exposeHeaders: null,
+                    maxAge: 0,
+                    allowCredentials: false
+                }
+        }
+        activeRevisionsMode = "Single"
+      }
+      environmentId = var.container_app_environment_id
+      template = {
+        containers = [
+          {
+            name = "esg-disclosure-management"
+            image = local.esg_disclosure_management_image
+            resources = {
+              cpu = var.min_cpu
+              memory = var.min_memory
+            }
+            env = [
+              {
+        name  = "LOG_LEVEL"
+        value = "INFO"
+      },
+      {
+        name  = "VERSION"
+        value = "0.1.0"
+      },
+      {
+        name  = "API_PATH"
+        value = "/"
+      },
+      {
+        name  = "SWAGGER_DOCS"
+        value = "True"
+      },
+      {
+        name  = "POSTGRES_SERVER"
+        value = var.database_server_url
+      },
+      {
+        name  = "POSTGRES_DB"
+        value = var.database_database
+      },
+      {
+        name  = "POSTGRES_USER"
+        value = var.database_user
+      },
+      {
+        name  = "FILE_UPLOAD_PATH"
+        value = "/mnt/code/surveyfiles"
+      },
+      {
+        name        = "POSTGRES_PASSWORD"
+        secretRef = "databasepassword"
+      },
+      {
+        name = "RBMQ_HOST"
+        value = var.rabbitmq_host
+      },
+      {
+        name = "RBMQ_PORT"
+        value = "5672"
+      },
+      {
+        name = "RBMQ_VHOST"
+        value = var.customer
+      },
+      {
+        name = "RBMQ_USER"
+        value = var.rabbitmq_user
+      },
+      {
+        name = "RBMQ_PASSWORD"
+        secretRef = "rabbitmqpassword"
+      },
+      {
+        name  = "KEYCLOAK_URL"
+        value = var.keycloak_url
+      },
+      {
+        name  = "KEYCLOAK_REALM"
+        value = var.keycloak_realm
+      },
+      {
+        name  = "KEYCLOAK_CLIENT_ID"
+        value = var.keycloak_client_id_esg
+      },
+      {
+        name  = "AUDIT_TRAIL_DOMAIN"
+        value = "https://audit-trail-service.${var.env_domain}"
+      }
+            ]
+            
+            volumeMounts = [
+              {
+                volumeName = "esgfiles"
+                mountPath = local.attachments_mount_path
+              }
+            ]
+          }
+        ]
+        volumes = [
+          {
+            name = "esgfiles"
+            storageName = azurerm_container_app_environment_storage.esgfiles.name
+            storageType = "AzureFile"
+          }
+        
+        ]
+        scale = {
+          minReplicas = 1
+          maxReplicas = var.max_replicas
+        }
+        initContainers = [
+          {
+            name = "esg-disclosure-management-init"
+            image = local.esg_disclosure_management_init_image
+            resources = {
+              cpu = var.min_cpu
+              memory = var.min_memory
+            }
+            env = [
+              {
+        name  = "LOG_LEVEL"
+        value = "INFO"
+      },
+      {
+        name  = "VERSION"
+        value = "0.1.0"
+      },
+      {
+        name  = "API_PATH"
+        value = "/"
+      },
+      {
+        name  = "SWAGGER_DOCS"
+        value = "True"
+      },
+      {
+        name  = "POSTGRES_SERVER"
+        value = var.database_server_url
+      },
+      {
+        name  = "POSTGRES_DB"
+        value = var.database_database
+      },
+      {
+        name  = "POSTGRES_USER"
+        value = var.database_user
+      },
+      {
+        name  = "APP_DB_PORT"
+        value = "5432"
+      },
+      {
+        name  = "FILE_UPLOAD_PATH"
+        value = "/mnt/code/surveyfiles"
+      },
+      {
+        name        = "POSTGRES_PASSWORD"
+        secretRef = "databasepassword"
+      },
+      {
+        name = "RBMQ_HOST"
+        value = var.rabbitmq_host
+      },
+      {
+        name = "RBMQ_PORT"
+        value = "5672"
+      },
+      {
+        name = "RBMQ_VHOST"
+        value = var.customer
+      },
+      {
+        name = "RBMQ_USER"
+        value = var.rabbitmq_user
+      },
+      {
+        name = "RBMQ_PASSWORD"
+        secretRef = "rabbitmqpassword"
+      },
+      {
+        name  = "KEYCLOAK_URL"
+        value = var.keycloak_url
+      },
+      {
+        name  = "KEYCLOAK_REALM"
+        value = var.keycloak_realm
+      },
+      {
+        name  = "KEYCLOAK_CLIENT_ID"
+        value = var.keycloak_client_id_esg
+      }
+            ]
+          }
+        ]
+      }
+    }
+  })
+  response_export_values = [ "properties.configuration.ingress.fqdn", "properties.outboundIpAddresses" ]
+  depends_on = [  azurerm_container_app_environment_storage.esgfiles,
+                  azurerm_postgresql_flexible_server_database.esgdb
+               ]
+}
+
 resource "azapi_resource" "esg_organization_module" {
   type = "Microsoft.App/containerApps@2023-05-01"
   name = local.esg_organization_module_name
@@ -1120,6 +1396,7 @@ resource "azapi_resource" "esg_organization_module" {
            corsPolicy = {
                     allowedOrigins = [
                         "https://esg-frontend-service.${var.default_domain}",
+                        "https://${var.customer}.afcsoftware.com",
                         "https://${var.customer}.afcdemo.com"
                     ],
                     allowedMethods = [

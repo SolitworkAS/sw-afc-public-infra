@@ -202,6 +202,7 @@ resource "azapi_resource" "carbacc_taskmanagement_service" {
            corsPolicy = {
                     allowedOrigins = [
                         "https://carbacc-frontend-service.${var.default_domain}",
+                        "https://${var.customer}.afcsoftware.com",
                         "https://${var.customer}.afcdemo.com"
                     ],
                     allowedMethods = [
@@ -351,6 +352,7 @@ resource "azapi_resource" "carbacc_sourceload_service" {
           corsPolicy = {
                     allowedOrigins = [
                         "https://carbacc-frontend-service.${var.default_domain}",
+                        "https://${var.customer}.afcsoftware.com",
                         "https://${var.customer}.afcdemo.com"
                     ],
                     allowedMethods = [

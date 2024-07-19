@@ -24,6 +24,7 @@ module "environment" {
   rabbitmq_user               = var.rabbitmq_user
   availability_zone = var.availability_zone
   keycloak_version = var.keycloak_version
+  audit_version = var.audit_version
 }
 
 module "carbacc" {
@@ -177,7 +178,7 @@ module "vat" {
   depends_on = [module.environment]
 }
 
-resource "time_sleep" "wait_30_seconds" {
+resource "time_sleep" "Deployment_Proceed" {
   depends_on = [module.environment]
   create_duration = "300s"
 }
@@ -209,7 +210,8 @@ module "realm" {
   keycloak_admin_user        = var.keycloak_admin_user
   reportingpassword = var.reportingpassword
 
-  depends_on = [time_sleep.wait_30_seconds]
+  depends_on = [time_sleep.Deployment_Proceed]
+
 }
 
 

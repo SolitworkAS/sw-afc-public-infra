@@ -123,6 +123,17 @@ resource "keycloak_role" "respondent_role" {
   depends_on = [ keycloak_realm.realm ]
 }
 
+resource "keycloak_role" "disclosure_manager" {
+  realm_id    = keycloak_realm.realm.id
+  name        = "disclosure-manager"
+  depends_on = [ keycloak_realm.realm ]
+}
+
+resource "keycloak_role" "disclosure_project_manager" {
+  realm_id    = keycloak_realm.realm.id
+  name        = "disclosure-project-manager"
+  depends_on = [ keycloak_realm.realm ]
+}
 
 # Groups
 resource "keycloak_group" "default_group" {
@@ -162,7 +173,9 @@ resource "keycloak_group_roles" "admin_group_roles" {
     keycloak_role.carbon_role.id,
     keycloak_role.organizer_role.id,
     keycloak_role.reporting_role.id,
-    keycloak_role.respondent_role.id
+    keycloak_role.respondent_role.id,
+    keycloak_role.disclosure_manager.id,
+    keycloak_role.disclosure_project_manager.id
 
   ]
 }
@@ -214,12 +227,40 @@ resource "keycloak_group" "esg_respondent_group" {
   name     = "esg_respondent"
 }
 
+resource "keycloak_group" "disclosure_manager_group" {
+  realm_id = keycloak_realm.realm.id
+  name     = "disclosure_manager"
+}
+
+resource "keycloak_group" "disclosure_project_manager_group" {
+  realm_id = keycloak_realm.realm.id
+  name     = "disclosure_project_manager"
+}
+
 resource "keycloak_group_roles" "esg_respondent_group_roles" {
   realm_id = keycloak_realm.realm.id
   group_id = keycloak_group.esg_respondent_group.id
 
   role_ids = [
     keycloak_role.respondent_role.id
+  ]
+}
+
+resource "keycloak_group_roles" "disclosure_manager_group_roles" {
+  realm_id = keycloak_realm.realm.id
+  group_id = keycloak_group.disclosure_manager_group.id
+
+  role_ids = [
+    keycloak_role.disclosure_manager.id
+  ]
+}
+
+resource "keycloak_group_roles" "disclosure_project_manager_group_roles" {
+  realm_id = keycloak_realm.realm.id
+  group_id = keycloak_group.disclosure_project_manager_group.id
+
+  role_ids = [
+    keycloak_role.disclosure_project_manager.id
   ]
 }
 
@@ -339,6 +380,7 @@ resource "keycloak_openid_client" "vat" {
   valid_redirect_uris = [
     "${var.vat_frontend_url}/*",
     "https://${var.realm_name}.afcdemo.com/*",
+    "https://${var.realm_name}.afcsoftware.com/*",
     "http://localhost*",
     "http://localhost/*",
     "http://localhost:4200*",
@@ -394,6 +436,7 @@ resource "keycloak_openid_client" "esg" {
   valid_redirect_uris = [
     "${var.esg_frontend_url}/*",
     "https://${var.realm_name}.afcdemo.com/*",
+    "https://${var.realm_name}.afcsoftware.com/*",
     "http://localhost*",
     "http://localhost/*",
     "http://localhost:4200*",
@@ -449,6 +492,7 @@ resource "keycloak_openid_client" "carbacc" {
   valid_redirect_uris = [
     "${var.carbacc_frontend_url}/*",
     "https://${var.realm_name}.afcdemo.com/*",
+    "https://${var.realm_name}.afcsoftware.com/*",
     "http://localhost*",
     "http://localhost/*",
     "http://localhost:4200*",

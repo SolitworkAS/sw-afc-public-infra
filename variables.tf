@@ -50,6 +50,10 @@ variable "vat_version" {
 variable "keycloak_version" {
   default     = "1.0.0"
 }
+
+variable "audit_version" {
+  default     = "1.0.1"
+}
 # CONTAINER REGISTRY VARIABLES
 variable "container_registry" {
   default     = "imagesdevregistry.azurecr.io"

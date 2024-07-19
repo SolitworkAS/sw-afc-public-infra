@@ -38,6 +38,7 @@ module "main" {
   esg_version     = var.esg_version
   vat_version     = var.vat_version
   keycloak_version = var.keycloak_version
+  audit_version = var.audit_version
 
   min_replicas = var.min_replicas
   max_replicas = var.max_replicas

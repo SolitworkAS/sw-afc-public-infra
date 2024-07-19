@@ -26,6 +26,6 @@ provider "keycloak" {
   client_id = "admin-cli"
   username  = var.keycloak_admin_user
   password  = var.keycloak_admin_password
-  url       = module.main.user_management_url
+  url = "https://keycloak.${module.main.env_domain}"
   initial_login = false
 }

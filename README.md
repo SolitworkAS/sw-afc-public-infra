@@ -166,3 +166,17 @@ After deployment, Terraform provides several URLs crucial for accessing and mana
 ### Q3: What if I don't have a compatible SMTP setup?
 **A:** Follow the SMTP guide in the guides folder and you will have a compatible setup by the end of it.
 
+### Q4: How can we specify azure region for deployment?
+**A:** To specify the azure region you must use the the following variable in your terraform.tfvars
+
+    ```yaml
+    location = "(your-location)" 
+    ```
+    Additionally, if westeurope is being used, you must specify the availability_zone for the deployment by adding to the terraform.tfvars
+    
+     ```yaml
+    availability_zone = "3" 
+    ```
+
+
+

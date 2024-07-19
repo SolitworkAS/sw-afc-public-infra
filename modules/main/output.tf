@@ -1,3 +1,7 @@
+output "env_domain" {
+  value = module.environment.default_domain
+}
+
 output "carbacc_frontend_url" {
   value = var.include_carbacc ? module.carbacc[0].carbacc_frontend_url : ""
 }

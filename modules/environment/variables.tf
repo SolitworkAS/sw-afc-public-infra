@@ -19,6 +19,10 @@ variable "keycloak_version" {
   default     = "1.0.0"
 }
 
+variable "audit_version" {
+  default     = "1.0.0"
+}
+
 variable "customer" {
   description = "shorthand abbrieviation for customer name, must only contain lowercase letters and numbers"
   validation {
@@ -121,6 +125,16 @@ variable "min_memory" {
   description = "minimum memory"
 }
 
+variable "min_replicas" {
+  description = "minimum replicas"
+  default = 1
+}
+
+variable "max_replicas" {
+  description = "maximum replicas"
+  default = 1  
+}
+
 
 # KEYCLOAK VARIABLES
 variable "keycloak_admin_user" {
@@ -137,5 +151,26 @@ variable "keycloak_admin_password" {
   validation {
     condition     = can(regex("^.{8,}$", var.keycloak_admin_password))
     error_message = "keycloak_admin_password must be at least 8 characters long"
+  }
+}
+
+# Storage Account Variables
+
+# STORAGE ACCOUNT VARIABLES
+
+variable "storage_quota" {
+  default = 100
+  description = "storage quota in GB, must be a number"
+  validation {
+    condition = can(regex("^[0-9]+$", var.storage_quota))
+    error_message = "storage_quota must be a number"
+  }
+}
+variable "storage_access_tier" {
+  default = "Hot"
+  description = "storage access tier, must be a valid Azure storage access tier"
+  validation {
+    condition = can(regex("^(Hot|Cool)$", var.storage_access_tier))
+    error_message = "storage_access_tier must be a valid Azure storage access tier"
   }
 }
