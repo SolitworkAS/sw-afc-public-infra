@@ -34,12 +34,12 @@ variable "customer" {
 
 variable "carbacc_version" {
   description = "version of carbacc to deploy"
-  default = "1.7.3"
+  default = "1.7.4"
 }
 
 variable "esg_version" {
   description = "version of esg to deploy"
-  default = "1.3.17"
+  default = "1.3.18"
 }
 
 variable "vat_version" {
