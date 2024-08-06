@@ -121,7 +121,7 @@ resource "azapi_resource" "carbacc_frontend_service" {
       },
       {
         name = "ESG_URL"
-        value = "https://esg-frontend-service.${var.default_domain}"
+        value = var.esg_url
       },
       {
         name  = "taskManagementUrl"

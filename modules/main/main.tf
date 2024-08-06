@@ -72,6 +72,7 @@ module "carbacc" {
   keycloak_url = module.environment.keycloak_url
   reportingpassword = var.reportingpassword
   default_domain = module.environment.default_domain
+  esg_url = var.use_proxy? "https://${var.customer}.${var.proxy_domain}" : "https://esg-frontend-service.${module.environment.default_domain}"
 
   depends_on = [module.environment]
 
@@ -120,7 +121,7 @@ module "esg" {
   keycloak_realm = var.customer
   keycloak_url = module.environment.keycloak_url
   default_domain = module.environment.default_domain
-  carbacc_url = var.include_carbacc ? module.carbacc[0].carbon_api_url : ""
+  carbacc_url = var.include_carbacc ? var.use_proxy? "https://${var.customer}.${var.proxy_domain}/carbacc" : "https://carbacc-frontend-service.${module.environment.default_domain}" : ""
 
   smtp_host     = var.smtp_host
   smtp_port     = var.smtp_port

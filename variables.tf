@@ -39,7 +39,7 @@ variable "carbacc_version" {
 
 variable "esg_version" {
   description = "version of esg to deploy"
-  default = "1.3.18"
+  default = "1.3.19"
 }
 
 variable "vat_version" {
@@ -54,6 +54,17 @@ variable "keycloak_version" {
 variable "audit_version" {
   default     = "1.0.1"
 }
+
+variable "use_proxy" {
+  default     = false
+  description = "Set to true if the proxy is used. It set's internal links so they are routed through the proxy"
+}
+
+variable "proxy_domain" {
+  default = "afcsoftware.com"
+  description = "Star domain used by the proxy Eg. afcsoftware.com for customer1.afcsoftware.com"
+}
+
 # CONTAINER REGISTRY VARIABLES
 variable "container_registry" {
   default     = "imagesdevregistry.azurecr.io"

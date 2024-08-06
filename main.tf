@@ -47,4 +47,7 @@ module "main" {
   include_esg     = var.include_esg
   include_carbacc = var.include_carbacc
 
+  use_proxy = var.use_proxy
+  proxy_domain = var.proxy_domain
+
 }

@@ -13,6 +13,16 @@ variable "include_carbacc" {
   default = false
 }
 
+variable "use_proxy" {
+  default     = false
+  description = "Set to true if the proxy is used. It set's internal links so they are routed through the proxy"
+}
+
+variable "proxy_domain" {
+  default = "afcsoftware.com"
+  description = "Star domain used by the proxy Eg. afcsoftware.com for customer1.afcsoftware.com"
+}
+
 
 # GENERAL VARIABLES
 variable "location" {

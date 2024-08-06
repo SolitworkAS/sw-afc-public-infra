@@ -23,6 +23,11 @@ variable "location" {
   description = "location of the resource group, must be a valid Azure location"
 }
 
+variable "esg_url" {
+  default     = ""
+  description = "URL to ESG"
+}
+
 # SCALING VARIABLES
 variable "min_replicas" {
   default = 0
