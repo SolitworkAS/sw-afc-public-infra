@@ -338,7 +338,7 @@ resource "azapi_resource" "esg_frontend_service" {
       },
       {
         name = "CARBACC_URL"
-        value = var.carbacc_included? "https://carbacc-frontend-service.${var.env_domain}" : ""
+        value = var.carbacc_frontend_url
       },
       {
         name = "RBMQ_HOST"
@@ -1669,7 +1669,7 @@ resource "azapi_resource" "esg_csv_service" {
             },
             {
               name = "CARBACC_URL"
-              value = var.carbacc_url
+              value = "https://carbacc-taskmanagement-service.${var.env_domain}"
             },
              {
               name  = "KEYCLOAK_URL"

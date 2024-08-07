@@ -121,7 +121,7 @@ module "esg" {
   keycloak_realm = var.customer
   keycloak_url = module.environment.keycloak_url
   default_domain = module.environment.default_domain
-  carbacc_url = var.include_carbacc ? var.use_proxy? "https://${var.customer}.${var.proxy_domain}/carbacc" : "https://carbacc-frontend-service.${module.environment.default_domain}" : ""
+  carbacc_frontend_url = var.include_carbacc ? var.use_proxy? "https://${var.customer}.${var.proxy_domain}/carbacc" : "https://carbacc-frontend-service.${module.environment.default_domain}" : ""
 
   smtp_host     = var.smtp_host
   smtp_port     = var.smtp_port

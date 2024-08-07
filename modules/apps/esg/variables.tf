@@ -253,6 +253,6 @@ variable "min_memory" {
   description = "minimum memory"
 }
 # Carbacc var
-variable "carbacc_url" {
+variable "carbacc_frontend_url" {
   description = "Carbacc url, must be a valid url (fully qualified domain name)"
 }
