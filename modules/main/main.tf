@@ -132,6 +132,9 @@ module "esg" {
   carbacc_included = var.include_carbacc
   env_domain =  module.environment.default_domain
 
+  posthogkey = var.posthogkey
+  posthoghost = var.posthoghost
+
   depends_on = [module.environment]
 }
 

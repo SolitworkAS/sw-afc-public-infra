@@ -49,5 +49,7 @@ module "main" {
 
   use_proxy = var.use_proxy
   proxy_domain = var.proxy_domain
-
+  
+  posthogkey = var.posthogkey
+  posthoghost = var.posthoghost
 }

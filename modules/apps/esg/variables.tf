@@ -256,3 +256,13 @@ variable "min_memory" {
 variable "carbacc_frontend_url" {
   description = "Carbacc url, must be a valid url (fully qualified domain name)"
 }
+# PostHog var
+variable "posthogkey" {
+  description = "PostHog api token"
+  sensitive = true
+}
+
+variable "posthoghost" {
+  description = "PostHog host"
+  default = "https://eu.i.posthog.com"
+}

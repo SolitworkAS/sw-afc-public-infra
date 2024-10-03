@@ -39,7 +39,7 @@ variable "carbacc_version" {
 
 variable "esg_version" {
   description = "version of esg to deploy"
-  default = "1.3.25"
+  default = "1.3.26"
 }
 
 variable "vat_version" {
@@ -209,7 +209,7 @@ variable "smtp_from" {
   }
 }
 
-#APPLICATION ADMIN VARIABLES
+# APPLICATION ADMIN VARIABLES
 variable "app_admin_email" {
   description = "Application admin email, must be a valid email address"
   validation {
@@ -250,7 +250,15 @@ variable "storage_access_tier" {
     error_message = "storage_access_tier must be a valid Azure storage access tier"
   }
 }
-
-## END OF VARIABLES ##
+# PostHog Variables
+variable "posthogkey" {
+  description = "PostHog key"
+  default = "phc_PTj5SVMlbPhTxHuOj2A5139u77nj6kZXlUraTH5MqXs"
+  sensitive = true
+}
+variable "posthoghost" {
+  description = "PostHog host"
+  default = "https://eu.i.posthog.com"
+}
 
 

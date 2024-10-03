@@ -276,6 +276,10 @@ resource "azapi_resource" "esg_frontend_service" {
           {
             name = "reportingpassword"
             value = var.reportingpassword
+          },
+          {
+            name = "posthogkey"
+            value = var.posthogkey
           }
         ]
         registries = [
@@ -359,6 +363,14 @@ resource "azapi_resource" "esg_frontend_service" {
       {
         name = "RBMQ_PASSWORD"
         secretRef = "rabbitmqpassword"
+      },
+      {
+        name = "POSTHOG_KEY"
+        secretRef = "posthogkey"
+      },
+      {
+        name = "POSTHOG_HOST"
+        value = var.posthoghost
       },
             ]
             volumeMounts = [

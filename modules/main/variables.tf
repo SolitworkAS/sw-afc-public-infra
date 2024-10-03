@@ -277,5 +277,14 @@ variable "storage_access_tier" {
   }
 }
 
+# PostHog Variables
+variable "posthogkey" {
+  description = "PostHog api key"
+  sensitive = true
+}
+variable "posthoghost" {
+  description = "PostHog host"
+  default = "https://eu.i.posthog.com"
+}
 
 
