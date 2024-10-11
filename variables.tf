@@ -39,7 +39,7 @@ variable "carbacc_version" {
 
 variable "esg_version" {
   description = "version of esg to deploy"
-  default = "1.3.26"
+  default = "1.3.27"
 }
 
 variable "vat_version" {
@@ -52,7 +52,7 @@ variable "keycloak_version" {
 }
 
 variable "audit_version" {
-  default     = "1.0.2"
+  default     = "1.0.3"
 }
 
 variable "use_proxy" {
