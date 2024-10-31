@@ -25,6 +25,11 @@ locals {
   esg_disclosure_management_name  = "esg-disclosure-management"
   esg_disclosure_management_image = "${var.container_registry}/images/esg/disclosure_management:${var.esg_version}"
   esg_disclosure_management_init_image  = "${var.container_registry}/images/esg/disclosure_management_init:${var.esg_version}"
+  
+  # External Endpoints
+
+  external_endpoints_name  = "external-endpoints"
+  external_endpoints_image = "${var.container_registry}/images/esg/external_endpoints:${var.esg_version}"
 
 
   # CSV service
@@ -220,6 +225,10 @@ resource "azapi_resource" "esg_notification_manager" {
       {
         name        = "EMAIL_PASSWORD"
         secretRef = "emailpassword"
+      },
+      {
+        name = "LOGIN_PAGE"
+        value = "https://esg-frontend-service.${var.default_domain}"
       }
             ]
             volumeMounts = [
@@ -312,6 +321,10 @@ resource "azapi_resource" "esg_frontend_service" {
               memory = var.min_memory
             }
             env = [
+      {
+        name  = "VERSION"
+        value = var.esg_version
+      },
       {
         name  = "KEYCLOAK_URL"
         value = var.keycloak_url
@@ -642,7 +655,7 @@ resource "azapi_resource" "esg_user_management" {
       },
       {
         name  = "VERSION"
-        value = "0.1.0"
+        value = var.esg_version
       },
       {
         name  = "API_PATH"
@@ -736,7 +749,7 @@ resource "azapi_resource" "esg_user_management" {
       },
       {
         name  = "VERSION"
-        value = "0.1.0"
+        value = var.esg_version
       },
       {
         name  = "API_PATH"
@@ -896,7 +909,7 @@ resource "azapi_resource" "esg_survey_manager" {
       },
       {
         name  = "VERSION"
-        value = "0.1.0"
+        value = var.esg_version
       },
       {
         name  = "API_PATH"
@@ -1014,7 +1027,7 @@ resource "azapi_resource" "esg_survey_manager" {
       },
       {
         name  = "VERSION"
-        value = "0.1.0"
+        value = var.esg_version
       },
       {
         name  = "API_PATH"
@@ -1186,7 +1199,7 @@ resource "azapi_resource" "esg_disclosure_management" {
       },
       {
         name  = "VERSION"
-        value = "0.1.0"
+        value = var.esg_version
       },
       {
         name  = "API_PATH"
@@ -1251,6 +1264,10 @@ resource "azapi_resource" "esg_disclosure_management" {
       {
         name  = "AUDIT_TRAIL_DOMAIN"
         value = "https://audit-trail-service.${var.env_domain}"
+      },
+      {
+        name = "LOGIN_PAGE"
+        value = "https://esg-frontend-service.${var.default_domain}"
       }
             ]
             
@@ -1289,7 +1306,7 @@ resource "azapi_resource" "esg_disclosure_management" {
       },
       {
         name  = "VERSION"
-        value = "0.1.0"
+        value = var.esg_version
       },
       {
         name  = "API_PATH"
@@ -1441,7 +1458,7 @@ resource "azapi_resource" "esg_organization_module" {
       },
       {
         name  = "VERSION"
-        value = "0.1.0"
+        value = var.esg_version
       },
       {
         name  = "API_PATH"
@@ -1535,7 +1552,7 @@ resource "azapi_resource" "esg_organization_module" {
       },
       {
         name  = "VERSION"
-        value = "0.1.0"
+        value = var.esg_version
       },
       {
         name  = "API_PATH"
@@ -1669,7 +1686,7 @@ resource "azapi_resource" "esg_csv_service" {
             },
             {
               name  = "VERSION"
-              value = "0.1.0"
+              value = var.esg_version
             },
             {
               name  = "API_PATH"
@@ -1695,6 +1712,165 @@ resource "azapi_resource" "esg_csv_service" {
               name  = "KEYCLOAK_CLIENT_ID"
               value = var.keycloak_client_id_esg
             }
+            ]
+            volumeMounts = [
+              {
+                volumeName = "esgfiles"
+                mountPath = local.attachments_mount_path
+              }
+            ]
+          }
+        ]
+        volumes = [
+          {
+            name = "esgfiles"
+            storageName = azurerm_container_app_environment_storage.esgfiles.name
+            storageType = "AzureFile"
+          }
+        
+        ]
+        scale = {
+          minReplicas = 1
+          maxReplicas = var.max_replicas
+        }
+      }
+    }
+  })
+  response_export_values = [ "properties.configuration.ingress.fqdn", "properties.outboundIpAddresses" ]
+  depends_on = [  azurerm_container_app_environment_storage.esgfiles,
+                  azurerm_postgresql_flexible_server_database.esgdb
+               ]
+}
+
+### External Endpoints
+
+resource "azapi_resource" "external_endpoints" {
+  type = "Microsoft.App/containerApps@2023-05-01"
+  name = local.external_endpoints_name
+  parent_id = var.resource_group_id
+  location = var.location
+  body = jsonencode({
+    properties = {
+      configuration = {
+        secrets = [
+          {
+            name = "containerregistrypassword"
+            value = var.container_registry_password
+          },
+          {
+            name = "reportingpassword"
+            value = var.reportingpassword
+          },
+          {
+            name = "databasepassword"
+            value = var.database_password
+          }
+        ]
+        registries = [
+          {
+            server = var.container_registry
+            username = var.container_registry_username
+            passwordSecretRef = "containerregistrypassword"
+          }
+        ]
+        ingress = {
+          external = true
+          targetPort = 80
+          traffic = [
+            {
+              latestRevision = true
+              weight = 100
+            }
+          ]
+        }
+        activeRevisionsMode = "Single"
+      }
+      environmentId = var.container_app_environment_id
+      template = {
+        containers = [
+          {
+            name = "external-endpoints"
+            image = local.external_endpoints_image
+            resources = {
+              cpu = 0.25
+              memory = "0.5Gi"
+            }
+            env = [
+             {
+              name  = "LOG_LEVEL"
+              value = "INFO"
+            },
+            {
+              name  = "VERSION"
+              value = var.esg_version
+            },
+            {
+              name  = "API_PATH"
+              value = "/"
+            },
+            {
+              name  = "SWAGGER_DOCS"
+              value = "True"
+            },
+            {
+              name = "CARBACC_TASKMANAGEMENT_SERVICE"
+              value = "https://carbacc-taskmanagement-service.${var.env_domain}"
+            },
+             {
+              name  = "KEYCLOAK_URL"
+              value = var.keycloak_url
+            },
+            {
+              name  = "KEYCLOAK_REALM"
+              value = var.keycloak_realm
+            },
+            {
+              name  = "KEYCLOAK_CLIENT_ID"
+              value = var.keycloak_client_id_esg
+            },
+            {
+            name  = "KEYCLOAK_REPORTING_USERNAME"
+            value = "reporting@solitwork.com"
+            }
+            ,
+            {
+              name  = "KEYCLOAK_REPORTING_PASSWORD"
+              secretRef = "reportingpassword"
+            },
+            {
+              name  = "POSTGRES_SERVER_CARBACC"
+              value = var.database_server_url
+            },
+            {
+              name  = "POSTGRES_DB_CARBACC"
+              value = "carbacc-db"
+            },
+            {
+              name  = "POSTGRES_USER_CARBACC"
+              value = var.database_user
+            },
+            {
+              name        = "POSTGRES_PASSWORD_CARBACC"
+              secretRef = "databasepassword"
+            },
+            {
+              name        = "POSTGRES_SCHEMA_CARBACC"
+              value = "taskmanagement"
+            },
+            {
+              name        = "ESG_ORGANIZATION_MODULE_SERVICE"
+              value = "https://esg-organization-module.${var.env_domain}"
+            },
+            {
+              name        = "ESG_DISCLOSURE_MANAGEMENT_SERVICE"
+              value = "https://esg-disclosure-management.${var.env_domain}"
+            },
+            {
+              name        = "ESG_SURVEY_MANAGER_SERVICE"
+              value = "https://esg-survey-manager.${var.env_domain}"
+            },
+            
+
             ]
             volumeMounts = [
               {
@@ -1794,7 +1970,7 @@ resource "azapi_resource" "esg-job-schedulations" {
           },
           {
             name  = "VERSION"
-            value = "0.1.0"
+            value = var.esg_version
           },
           {
             name  = "API_PATH"
@@ -1940,7 +2116,7 @@ resource "azapi_resource" "esg-job-notifications" {
           },
           {
             name  = "VERSION"
-            value = "0.1.0"
+            value = var.esg_version
           },
           {
             name  = "API_PATH"
