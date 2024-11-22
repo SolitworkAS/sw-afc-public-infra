@@ -39,7 +39,7 @@ variable "carbacc_version" {
 
 variable "esg_version" {
   description = "version of esg to deploy"
-  default = "2024.11.02"
+  default = "2024.11.3"
 }
 
 variable "vat_version" {
