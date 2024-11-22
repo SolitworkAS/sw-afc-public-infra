@@ -169,6 +169,9 @@ After deployment, Terraform provides several URLs crucial for accessing and mana
 ### Q4: How can we specify azure region for deployment?
 **A:** To specify the azure region you must use the the following variable in your terraform.tfvars
 
+### Q5: What should I do if I encounter an error stating `... The Resource Provider was not registered ...` during installation or update?
+**A:** This error often occurs due to issues with the subscription - where Microsoft.App hasn't yet been registered. To fix this, you need to manually register the Microsoft.App resource provider for your subscription. Run the following: `az provider register --namespace "Microsoft.App"`, Registration can take a few minutes. To check the status, run: `az provider show --namespace "Microsoft.App" --query "registrationState"`, When this command returns "Registered", the provider is ready to use. Now try running the command `terraform apply` again.
+
     ```yaml
     location = "(your-location)" 
     ```
