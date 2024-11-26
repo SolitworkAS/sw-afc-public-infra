@@ -20,17 +20,17 @@ Its possible to upload csv files that adhere to the following specifications:
     Quote Character: Double quotes (")
     Record Format: Each record is on a new line.
     Fields:
-        sourceID (string): A unique identifier for the transaction.
-        source (string): Name or ID of the source system.
-        organization (string): Name or ID of the organization.
-        vendor (string, optional): Name or ID of the vendor. This field can be empty.
-        unit (string): The unit of measure, e.g., "DKK".
+        sourceID (string, 200 characters): A unique identifier for the transaction.
+        source (string, 200 characters): Name or ID of the source system.
+        organization (string, 200 characters): Name or ID of the organization.
+        vendor (string, optional, 200 characters): Name or ID of the vendor. This field can be empty.
+        unit (string, 50 characters): The unit of measure, e.g., "DKK".
         amount (decimal): Numeric value representing the amount ("." as decimal sign).
         activityDate (date in YYYY-MM-DD format): Date of the activity.
-        category (string): Category of the item (typically account for financial transactions).
-        comments (string, optional): Any additional comments. This field can be empty.
-        department (string, optional): Name of the department. This field can be empty.
-        customAttribute1 through customAttribute5 (strings, optional): Custom attributes for additional data. These fields can be empty.
+        category (string, 200 characters): Category of the item (typically account for financial transactions).
+        comments (string, optional, 1000 characters): Any additional comments. This field can be empty.
+        department (string, optional, 250 characters): Name of the department. This field can be empty.
+        customAttribute1 through customAttribute5 (strings, optional, 500 characters each): Custom attributes for additional data. These fields can be empty.
 
 Example:
 ```
@@ -139,16 +139,23 @@ If you are using commas in data values (e.g., in the Amount column as a thousand
 
 Open the CSV file in Notepad, press Ctrl + F to find all semicolons, and replace them with commas.
 
-### File encoding:
+### File encoding
 **Files must be saved in UTF-8 format, not UTF-8 with BOM.**
 
 Open the file in Notepad, save it with the encoding option set to "UTF-8."
 
-### Hidden characters:
+### Hidden characters
 **Some Excel versions may introduce hidden characters during the conversion to CSV.**
 
 Use a tool like Notepad++ to visualize and remove any hidden characters.
 
+### Characters
+
+The following characters are known to cause problems if they are part of the entry: 
+
+```
+(#), (/), (\), ("), ('), and (%)
+```
 ### Uploading the CSV file
 **Authorization**
 
