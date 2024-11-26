@@ -8,6 +8,7 @@ This is a guide on how to import CSV files with transaction for the carbon accou
 - [Import - Step 2. Authorize](#import---step-2-authorize)
 - [Import - Step 3. Import file](#import---step-3-import-file)
 - [Frequently asked questions](#frequently-asked-questions)
+- [Common Issues When Preparing and Uploading CSV Files](#common-issues-when-preparing-and-uploading-csv-files)
 
 
 ## CSV File format
