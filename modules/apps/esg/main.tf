@@ -649,7 +649,7 @@ resource "azapi_resource" "esg_user_management" {
               memory = var.min_memory
             }
             env = [
-              {
+      {
         name  = "LOG_LEVEL"
         value = "INFO"
       },
@@ -743,7 +743,7 @@ resource "azapi_resource" "esg_user_management" {
               memory = var.min_memory
             }
             env = [
-              {
+      {
         name  = "LOG_LEVEL"
         value = "INFO"
       },
@@ -770,14 +770,6 @@ resource "azapi_resource" "esg_user_management" {
       {
         name  = "POSTGRES_USER"
         value = var.database_user
-      },
-      {
-        name  = "APP_DB_PORT"
-        value = "5432"
-      },
-      {
-        name  = "FILE_UPLOAD_PATH"
-        value = "/mnt/code/surveyfiles"
       },
       {
         name        = "POSTGRES_PASSWORD"
@@ -903,7 +895,7 @@ resource "azapi_resource" "esg_survey_manager" {
               memory = var.min_memory
             }
             env = [
-              {
+      {
         name  = "LOG_LEVEL"
         value = "INFO"
       },
@@ -1021,7 +1013,7 @@ resource "azapi_resource" "esg_survey_manager" {
               memory = var.min_memory
             }
             env = [
-              {
+      {
         name  = "LOG_LEVEL"
         value = "INFO"
       },
@@ -1038,6 +1030,10 @@ resource "azapi_resource" "esg_survey_manager" {
         value = "True"
       },
       {
+        name = "LOGIN_PAGE"
+        value = "https://esg-frontend-service.${var.default_domain}"
+      },
+      {
         name  = "POSTGRES_SERVER"
         value = var.database_server_url
       },
@@ -1048,10 +1044,6 @@ resource "azapi_resource" "esg_survey_manager" {
       {
         name  = "POSTGRES_USER"
         value = var.database_user
-      },
-      {
-        name  = "APP_DB_PORT"
-        value = "5432"
       },
       {
         name  = "FILE_UPLOAD_PATH"
@@ -1092,15 +1084,18 @@ resource "azapi_resource" "esg_survey_manager" {
       {
         name  = "KEYCLOAK_CLIENT_ID"
         value = var.keycloak_client_id_esg
-      },
+      }
+      ,
       {
-            name  = "JOB_SURVEY_MANAGER_HOST"
-            value = "https://esg-survey-manager.${var.env_domain}"
-      },
+        name  = "JOB_SURVEY_MANAGER_HOST"
+        value = "https://esg-survey-manager.${var.env_domain}"
+      }
+      ,
       {
         name  = "JOB_ADMIN_USERNAME"
         value = "reporting@solitwork.com"
-      },
+      }
+      ,
       {
         name  = "JOB_ADMIN_PASSWORD"
         secretRef = "reportingpassword"
@@ -1193,7 +1188,7 @@ resource "azapi_resource" "esg_disclosure_management" {
               memory = var.min_memory
             }
             env = [
-              {
+      {
         name  = "LOG_LEVEL"
         value = "INFO"
       },
@@ -1300,7 +1295,7 @@ resource "azapi_resource" "esg_disclosure_management" {
               memory = var.min_memory
             }
             env = [
-              {
+      {
         name  = "LOG_LEVEL"
         value = "INFO"
       },
@@ -1327,10 +1322,6 @@ resource "azapi_resource" "esg_disclosure_management" {
       {
         name  = "POSTGRES_USER"
         value = var.database_user
-      },
-      {
-        name  = "APP_DB_PORT"
-        value = "5432"
       },
       {
         name  = "FILE_UPLOAD_PATH"
@@ -1371,6 +1362,14 @@ resource "azapi_resource" "esg_disclosure_management" {
       {
         name  = "KEYCLOAK_CLIENT_ID"
         value = var.keycloak_client_id_esg
+      },
+      {
+        name  = "AUDIT_TRAIL_DOMAIN"
+        value = "https://audit-trail-service.${var.env_domain}"
+      },
+      {
+        name = "LOGIN_PAGE"
+        value = "https://esg-frontend-service.${var.default_domain}"
       }
             ]
           }
@@ -1452,7 +1451,7 @@ resource "azapi_resource" "esg_organization_module" {
               memory = var.min_memory
             }
             env = [
-              {
+      {
         name  = "LOG_LEVEL"
         value = "INFO"
       },
@@ -1546,7 +1545,7 @@ resource "azapi_resource" "esg_organization_module" {
               memory = var.min_memory
             }
             env = [
-              {
+      {
         name  = "LOG_LEVEL"
         value = "INFO"
       },
@@ -1573,14 +1572,6 @@ resource "azapi_resource" "esg_organization_module" {
       {
         name  = "POSTGRES_USER"
         value = var.database_user
-      },
-      {
-        name  = "APP_DB_PORT"
-        value = "5432"
-      },
-      {
-        name  = "FILE_UPLOAD_PATH"
-        value = "/mnt/code/surveyfiles"
       },
       {
         name        = "POSTGRES_PASSWORD"

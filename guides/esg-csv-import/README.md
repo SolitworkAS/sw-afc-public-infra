@@ -8,7 +8,6 @@ This is a guide on how to import CSV files with transaction for the carbon accou
 - [Import - Step 2. Authorize](#import---step-2-authorize)
 - [Import - Step 3. Import file](#import---step-3-import-file)
 - [Frequently asked questions](#frequently-asked-questions)
-- [Common Issues When Preparing and Uploading CSV Files](#common-issues-when-preparing-and-uploading-csv-files)
 
 
 ## CSV File format
@@ -20,17 +19,17 @@ Its possible to upload csv files that adhere to the following specifications:
     Quote Character: Double quotes (")
     Record Format: Each record is on a new line.
     Fields:
-        sourceID (string, 200 characters): A unique identifier for the transaction.
-        source (string, 200 characters): Name or ID of the source system.
-        organization (string, 200 characters): Name or ID of the organization.
-        vendor (string, optional, 200 characters): Name or ID of the vendor. This field can be empty.
-        unit (string, 50 characters): The unit of measure, e.g., "DKK".
+        sourceID (string): A unique identifier for the transaction.
+        source (string): Name or ID of the source system.
+        organization (string): Name or ID of the organization.
+        vendor (string, optional): Name or ID of the vendor. This field can be empty.
+        unit (string): The unit of measure, e.g., "DKK".
         amount (decimal): Numeric value representing the amount ("." as decimal sign).
         activityDate (date in YYYY-MM-DD format): Date of the activity.
-        category (string, 200 characters): Category of the item (typically account for financial transactions).
-        comments (string, optional, 1000 characters): Any additional comments. This field can be empty.
-        department (string, optional, 250 characters): Name of the department. This field can be empty.
-        customAttribute1 through customAttribute5 (strings, optional, 500 characters each): Custom attributes for additional data. These fields can be empty.
+        category (string): Category of the item (typically account for financial transactions).
+        comments (string, optional): Any additional comments. This field can be empty.
+        department (string, optional): Name of the department. This field can be empty.
+        customAttribute1 through customAttribute5 (strings, optional): Custom attributes for additional data. These fields can be empty.
 
 Example:
 ```
@@ -109,58 +108,3 @@ If there were errors when importing the file, you will also be notified here.
 
 ### Q: What happens if I upload a file containing transactions with already existing ID's?
 **A:** The file will be uploaded and will not generate an error. The transactions with the already existing ID's will not be uploaded or changed in any way. The reason for allowing files with existing ID's is to ease the work done when extracting data from other systems, so that you do not need to check if the file includes data already imported.
-
-## Common issues when preparing and uploading CSV files
-
-### Errors in headers
-**Correct Spelling and Capitalization**
-
-Ensure that all header names match the required format exactly, including capitalization and spacing. Even a minor deviation, such as an extra space or incorrect capitalization, will prevent the file from uploading.
-
-**Double-Check Headers**
-
-Before uploading, carefully review all headers to ensure accuracy.
-
-### Data formatting in Excel
-**Follow Correct Data Formats – Common Mistakes**
-
-Cells should not be formatted as general.
-
-**Dates must follow the format: yyyy-mm-dd.**
-
-If you are using commas in data values (e.g., in the Amount column as a thousand separator) make sure to enclose those entries with double quotes ("). Commas in entries will interfere with the CSV structure and cause errors during upload.
-
-### Converting excel-file to CSV
-**Delimiter Issues**
-
- When saving Excel files as CSV, some systems default to using a semicolon (;) as the delimiter instead of a comma (,). Our system expects a comma.
-   
-**Solution**
-
-Open the CSV file in Notepad, press Ctrl + F to find all semicolons, and replace them with commas.
-
-### File encoding
-**Files must be saved in UTF-8 format, not UTF-8 with BOM.**
-
-Open the file in Notepad, save it with the encoding option set to "UTF-8."
-
-### Hidden characters
-**Some Excel versions may introduce hidden characters during the conversion to CSV.**
-
-Use a tool like Notepad++ to visualize and remove any hidden characters.
-
-### Characters
-
-The following characters are known to cause problems if they are part of the entry: 
-
-```
-(#), (/), (\), ("), ('), and (%)
-```
-### Uploading the CSV file
-**Authorization**
-
-Ensure you are authorized to upload the file before proceeding. Authorization expires quickly, so complete the upload promptly after authorization.
-
-**File Verification**
-
-Double-check the CSV file for formatting issues before uploading.
