@@ -44,7 +44,7 @@ variable "esg_version" {
 
 variable "vat_version" {
   description = "version of esg to deploy"
-  default = "2024.11.1"
+  default = "2024.11.2"
 }
 
 variable "keycloak_version" {
