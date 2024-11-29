@@ -1860,8 +1860,10 @@ resource "azapi_resource" "external_endpoints" {
               name        = "ESG_SURVEY_MANAGER_SERVICE"
               value = "https://esg-survey-manager.${var.env_domain}"
             },
-            
-
+            {
+              name        = "ESG_FRONTEND"
+              value = "https://esg-frontend-service.${var.env_domain}"
+            },
             ]
             volumeMounts = [
               {

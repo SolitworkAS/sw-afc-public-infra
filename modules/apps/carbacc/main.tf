@@ -107,30 +107,34 @@ resource "azapi_resource" "carbacc_frontend_service" {
               memory = var.min_memory
             }
             env = [
-      {
-        name  = "KEYCLOAK_URL"
-        value = var.keycloak_url
-      },
-      {
-        name  = "KEYCLOAK_REALM"
-        value = var.keycloak_realm
-      },
-      {
-        name  = "KEYCLOAK_CLIENT_ID"
-        value = var.keycloak_client_id
-      },
-      {
-        name = "ESG_URL"
-        value = var.esg_url
-      },
-      {
-        name  = "taskManagementUrl"
-        value = "https://${jsondecode(azapi_resource.carbacc_taskmanagement_service.output).properties.configuration.ingress.fqdn}"
-      },
-      {
-        name  = "sourceLoadUrl"
-        value = "https://${jsondecode(azapi_resource.carbacc_sourceload_service.output).properties.configuration.ingress.fqdn}"
-      }
+              {
+                name  = "KEYCLOAK_URL"
+                value = var.keycloak_url
+              },
+              {
+                name  = "KEYCLOAK_REALM"
+                value = var.keycloak_realm
+              },
+              {
+                name  = "KEYCLOAK_CLIENT_ID"
+                value = var.keycloak_client_id
+              },
+              {
+                name = "ESG_URL"
+                value = var.esg_url
+              },
+              {
+                name  = "taskManagementUrl"
+                value = "https://${jsondecode(azapi_resource.carbacc_taskmanagement_service.output).properties.configuration.ingress.fqdn}"
+              },
+              {
+                name  = "sourceLoadUrl"
+                value = "https://${jsondecode(azapi_resource.carbacc_sourceload_service.output).properties.configuration.ingress.fqdn}"
+              },
+              {
+                name  = "CSV_IMPORT_URL"
+                value = "https://esg-csv-service.${var.default_domain}"
+              }
             ]
             volumeMounts = [
               {

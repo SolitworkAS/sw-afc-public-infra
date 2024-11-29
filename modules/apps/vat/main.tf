@@ -4,7 +4,7 @@ locals {
   # Vat processor configuration
   vat_processor_name          = "vat-processor"
   vat_processor_image         = "${var.container_registry}/images/vat/processor:${var.vat_version}"
-  
+
   # Vat datamanager configuration
   vat_datamanager_name        = "vatapi"
   vat_datamanager_image       = "${var.container_registry}/images/vat/datamanager:${var.vat_version}"
@@ -39,8 +39,8 @@ resource "azurerm_storage_share" "vatshare" {
   storage_account_name        = var.storage_account_name_vat
   quota                       = var.storage_quota
   access_tier                 = var.storage_access_tier
-  lifecycle { 
-  prevent_destroy = true
+  lifecycle {
+    prevent_destroy = true
   }
 }
 
@@ -51,8 +51,8 @@ resource "azurerm_container_app_environment_storage" "vatfiles" {
   share_name                   = azurerm_storage_share.vatshare.name
   access_key                   = var.storage_primary_access_key_vat
   access_mode                  = "ReadWrite"
-  lifecycle { 
-  prevent_destroy = true
+  lifecycle {
+    prevent_destroy = true
   }
   depends_on                   = [ azurerm_storage_share.vatshare]
 }
@@ -80,12 +80,16 @@ resource "azurerm_container_app" "vat_processor" {
     name = "containerregistrypassword"
     value = var.container_registry_password
   }
+  secret {
+    name = "databasepassword"
+    value = var.database_password
+  }
   template {
     container {
       name = "vat-processor"
-      image = local.vat_processor_image 
-      cpu = 0.25
-      memory = "0.5Gi"
+      image = local.vat_processor_image
+      cpu = 1
+      memory = "2Gi"
       env {
         name = "LOGLEVEL"
         value = "INFO"
@@ -111,20 +115,8 @@ resource "azurerm_container_app" "vat_processor" {
         secret_name = "rabbitmqpassword"
       }
       env {
-        name = "CONFIG_QUEUE"
-        value = local.config_queue
-      }
-      env {
-        name = "CONFIG_REQUEST_QUEUE"
-        value = local.config_request_queue
-      }
-      env {
         name = "TRANSACTION_QUEUE"
         value = local.transaction_queue
-      }
-      env {
-        name = "TRANSACTION_PROCESSED_QUEUE"
-        value = local.transaction_processed_queue
       }
       env {
         name = "QUEUE_CHUNK_SIZE"
@@ -133,6 +125,26 @@ resource "azurerm_container_app" "vat_processor" {
       env {
         name = "CONFIG_TIMEOUT_MINUTES"
         value = local.config_timeout_minutes
+      }
+      env {
+        name = "POSTGRES_SERVER"
+        value = var.database_server_url
+      }
+      env {
+        name = "POSTGRES_DB"
+        value = var.database_database
+      }
+      env {
+        name = "POSTGRES_SCHEMA"
+        value = "datamanager"
+      }
+      env {
+        name = "POSTGRES_USER"
+        value = var.database_user
+      }
+      env {
+        name = "POSTGRES_PASSWORD"
+        secret_name = "databasepassword"
       }
     }
     min_replicas = 1
@@ -305,7 +317,7 @@ resource "azapi_resource" "vat_datamanager" {
             storageName = azurerm_container_app_environment_storage.vatfiles.name
             storageType = "AzureFile"
           }
-        
+
         ]
         scale = {
           minReplicas = var.min_replicas
@@ -320,6 +332,14 @@ resource "azapi_resource" "vat_datamanager" {
               memory = "0.5Gi"
             }
             env = [
+              {
+                name = "DATAMANAGER_VERSION"
+                value = var.vat_version
+              },
+              {
+                name = "LOGLEVEL"
+                value = "INFO"
+              },
               {
                 name = "POSTGRES_SERVER"
                 value = var.database_server_url
@@ -339,6 +359,66 @@ resource "azapi_resource" "vat_datamanager" {
               {
                 name = "POSTGRES_PASSWORD"
                 secretRef = "databasepassword"
+              },
+              {
+                name = "RABBITMQ_HOST"
+                value = var.rabbitmq_name
+              },
+              {
+                name = "RABBITMQ_PORT"
+                value = "5672"
+              },
+              {
+                name = "RABBITMQ_VHOST"
+                value = var.customer
+              },
+              {
+                name = "RABBITMQ_USER"
+                value = var.rabbitmq_user
+              },
+              {
+                name = "RABBITMQ_PASS"
+                secretRef = "rabbitmqpassword"
+              },
+              {
+                name = "CONFIG_QUEUE"
+                value = local.config_queue
+              },
+              {
+                name = "CONFIG_REQUEST_QUEUE"
+                value = local.config_request_queue
+              },
+              {
+                name = "TRANSACTION_QUEUE"
+                value = local.transaction_queue
+              },
+              {
+                name = "TRANSACTION_PROCESSED_QUEUE"
+                value = local.transaction_processed_queue
+              },
+              {
+                name = "QUEUE_CHUNK_SIZE"
+                value = local.queue_chunk_size
+              },
+              {
+                name = "CONFIG_TIMEOUT_MINUTES"
+                value = local.config_timeout_minutes
+              },
+              {
+                name = "KEYCLOAK_URL"
+                value = var.keycloak_url
+              },
+              {
+                name = "KEYCLOAK_REALM"
+                value = var.keycloak_realm
+              },
+              {
+                name = "KEYCLOAK_CLIENT_ID"
+                value = var.keycloak_client_id
+              },
+              {
+                name = "ATTACHMENTS_PATH"
+                value = local.attachments_mount_path
               }
             ]
           }
@@ -348,8 +428,8 @@ resource "azapi_resource" "vat_datamanager" {
   })
   response_export_values = [ "properties.configuration.ingress.fqdn", "properties.outboundIpAddresses" ]
   depends_on = [  azurerm_container_app_environment_storage.vatfiles,
-                  azurerm_postgresql_flexible_server_database.vatdb
-               ]
+    azurerm_postgresql_flexible_server_database.vatdb
+  ]
 }
 
 resource "azurerm_postgresql_flexible_server_firewall_rule" "datamanager-postgres-fw" {
@@ -377,19 +457,19 @@ resource "azurerm_container_app" "vat_frontend" {
       cpu = 0.25
       memory = "0.5Gi"
       env {
-        name = "VAT_BACKEND_URL"
+        name = "NEXT_PUBLIC_VAT_BACKEND_URL"
         value = "https://${jsondecode(azapi_resource.vat_datamanager.output).properties.configuration.ingress.fqdn}"
       }
       env {
-        name = "KEYCLOAK_URL"
+        name = "NEXT_PUBLIC_KEYCLOAK_URL"
         value = var.keycloak_url
       }
       env {
-        name = "KEYCLOAK_REALM"
+        name = "NEXT_PUBLIC_KEYCLOAK_REALM"
         value = var.keycloak_realm
       }
       env {
-        name = "KEYCLOAK_CLIENT_ID"
+        name = "NEXT_PUBLIC_KEYCLOAK_CLIENT_ID"
         value = var.keycloak_client_id
       }
     }
