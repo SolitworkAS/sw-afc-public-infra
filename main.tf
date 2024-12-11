@@ -28,6 +28,7 @@ module "main" {
   app_admin_initial_password = var.app_admin_initial_password
   storage_access_tier = var.storage_access_tier
   storage_quota = var.storage_quota
+  storage_account_name = var.storage_account_name
 
 
   location         = var.location

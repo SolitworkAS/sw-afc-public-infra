@@ -174,3 +174,7 @@ variable "storage_access_tier" {
     error_message = "storage_access_tier must be a valid Azure storage access tier"
   }
 }
+variable "storage_account_name" {
+  description = "storage account name, must only contain lowercase letters and numbers"
+  default = ""
+}

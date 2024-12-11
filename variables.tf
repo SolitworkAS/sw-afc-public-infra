@@ -32,9 +32,15 @@ variable "customer" {
   }
 }
 
+variable "realm_name" {
+  description = "The name of the realm in Keycloak. Defaults to the customer name if not specified."
+  type        = string
+  default     = ""
+}
+
 variable "carbacc_version" {
   description = "version of carbacc to deploy"
-  default = "2024.11.1"
+  default = "2024.12.1"
 }
 
 variable "esg_version" {
@@ -249,6 +255,11 @@ variable "storage_access_tier" {
     condition = can(regex("^(Hot|Cool)$", var.storage_access_tier))
     error_message = "storage_access_tier must be a valid Azure storage access tier"
   }
+}
+
+variable "storage_account_name" {
+  description = "storage account name, must be a valid Azure storage account name"
+  default = ""
 }
 # PostHog Variables
 variable "posthogkey" {

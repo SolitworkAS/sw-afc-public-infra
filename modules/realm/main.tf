@@ -533,4 +533,3 @@ resource "keycloak_openid_audience_protocol_mapper" "carbacc_audience_mapper" {
   add_to_access_token = true
   add_to_id_token = false
 }
-

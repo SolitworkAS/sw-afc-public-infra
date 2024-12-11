@@ -277,6 +277,11 @@ variable "storage_access_tier" {
   }
 }
 
+variable "storage_account_name" {
+  description = "storage account name"
+  default = ""
+}
+
 # PostHog Variables
 variable "posthogkey" {
   description = "PostHog api key"

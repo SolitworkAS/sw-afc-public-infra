@@ -14,6 +14,7 @@ module "environment" {
   container_registry_password = var.container_registry_password
   min_cpu = var.min_cpu
   min_memory = var.min_memory
+  storage_account_name = var.storage_account_name
   database_sku                = var.database_sku
   database_storage            = var.database_storage
   database_user               = var.database_user
@@ -189,7 +190,6 @@ resource "time_sleep" "Deployment_Proceed" {
 
 module "realm" {
   source = "../realm"
-
   realm_name = var.customer
   default_domain = module.environment.default_domain
   smtp_host     = var.smtp_host

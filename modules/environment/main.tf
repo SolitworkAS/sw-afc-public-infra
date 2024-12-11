@@ -1,8 +1,7 @@
 
 # define locals
 locals {
-
-  storage                  = "${var.customer}swstorage"
+  storage = var.storage_account_name == "" ? "${var.customer}swstorage" : var.storage_account_name
 
   # Database configuration
   swdbserver                 = "${var.customer}-sw-db-server"
