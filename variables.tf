@@ -40,7 +40,7 @@ variable "realm_name" {
 
 variable "carbacc_version" {
   description = "version of carbacc to deploy"
-  default = "2025.02.1"
+  default = "2025.02.2"
 }
 
 variable "esg_version" {
