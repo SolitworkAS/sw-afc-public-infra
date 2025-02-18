@@ -31,6 +31,13 @@ locals {
   external_endpoints_name  = "external-endpoints"
   external_endpoints_image = "${var.container_registry}/images/esg/external_endpoints:${var.esg_version}"
 
+  # Export Service
+
+  esg_pbi_exporter_name  = "esg-pbi-exporter"
+  esg_pbi_exporter_image = "${var.container_registry}/images/esg/esg-pbi-exporter:${var.esg_pbi_version}"
+  storage = "${var.customer}pbiswstorage"
+
+
 
   # CSV service
 
@@ -2203,3 +2210,176 @@ resource "azapi_resource" "esg-job-notifications" {
     }
   })
 }
+
+### PowerBI exporter
+
+# Create a storage account for exporter
+resource "azurerm_storage_account" "storage" {
+  name                        = local.storage
+  resource_group_name         = var.resource_group_name
+  location                    = var.location
+  account_tier                = "Standard"
+  account_replication_type    = "GRS"
+  access_tier                 = "Hot"
+  share_properties {
+    retention_policy {
+      days = 30
+    }
+  }
+  lifecycle { 
+  prevent_destroy = true
+  }
+}
+
+resource "azurerm_storage_container" "pbi" {
+  name                  = "esgpbi"
+  storage_account_name  = azurerm_storage_account.storage.name
+  container_access_type = "private"
+}
+
+data "azurerm_storage_account_sas" "pbi_data_access_key" {
+  connection_string = azurerm_storage_account.storage.primary_connection_string
+  https_only        = true
+
+  resource_types {
+    service   = true
+    container = true
+    object    = true
+  }
+
+  services {
+    blob  = true
+    queue = false
+    table = false
+    file  = false
+  }
+
+  start  = "2025-02-01T00:00:00Z"
+  expiry = "2028-02-01T00:00:00Z"
+
+  permissions {
+    read    = true
+    write   = false
+    delete  = false
+    list    = true
+    add     = false
+    create  = false
+    update  = false
+    process = false
+    tag     = false
+    filter  = false
+  }
+}
+
+resource "azapi_resource" "esg-pbi-exporter" {
+  type      = "Microsoft.App/jobs@2023-05-02-preview"
+  name      = local.esg_pbi_exporter_name
+  parent_id = var.resource_group_id
+  location = var.location
+  schema_validation_enabled = false
+  
+  body = jsonencode({
+    properties = {
+      configuration = {
+        registries = [
+          {
+            server = var.container_registry
+            username = var.container_registry_username
+            passwordSecretRef = "containerregistrypassword"
+          }
+        ]
+        replicaRetryLimit = 1
+        replicaTimeout = 180
+        scheduleTriggerConfig = {
+          cronExpression = "0 * * * *"
+          parallelism = 1
+          replicaCompletionCount = 1
+        }
+       secrets = [
+          {
+            name = "databasepassword"
+            value = var.database_password
+          },
+          {
+            name = "containerregistrypassword"
+            value = var.container_registry_password
+          },
+          {
+            name = "containerregistrypassword"
+            value = var.container_registry_password
+          },
+          {
+            name = "reportingpassword"
+            value = var.reportingpassword
+          }
+        ]
+        triggerType = "Schedule"
+      }
+      environmentId = var.container_app_environment_id
+      template = {
+        containers = [
+          {
+            image = local.esg_pbi_exporter_image
+            name = "esg-pbi-exporter"
+            resources = {
+              cpu = var.min_cpu
+              memory = var.min_memory
+            }
+            env = [
+          {
+            name  = "LOG_LEVEL"
+            value = "INFO"
+          },
+          {
+            name  = "BASE_URL"
+            value = "https://external-endpoints.${var.default_domain}"
+          },
+          {
+            name  = "AZURE_STORAGE_ACCOUNT_NAME"
+            value = azurerm_storage_account.storage.name
+          },
+          {
+            name  = "AZURE_STORAGE_CONTAINER_NAME"
+            value = azurerm_storage_container.pbi.name
+          },
+          {
+            name  = "AZURE_STORAGE_ACCOUNT_KEY"
+            value = azurerm_storage_account.storage.primary_access_key
+          },
+          {
+            name  = "USERNAME"
+            value = var.initial_username
+          },
+          {
+            name  = "PASSWORD"
+            value = var.initial_password
+          },
+          {
+            name  = "LOAD_FROM_DATE"
+            value = "2020-01-01"
+          },
+          {
+            name  = "LOAD_TO_DATE"
+            value = "2028-12-31"
+          },
+          {
+            name  = "LOAD_SIZE"
+            value = "10000"
+          },
+          {
+            name  = "LOAD_THREADS"
+            value = "5"
+          },
+          {
+            name  = "RECORDS_PER_FILE"
+            value = "100000"
+          }
+                ]
+          }
+        ]
+      }
+    }
+  })
+}
+
+

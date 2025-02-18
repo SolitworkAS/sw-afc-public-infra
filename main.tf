@@ -37,6 +37,7 @@ module "main" {
 
   carbacc_version = var.carbacc_version
   esg_version     = var.esg_version
+  esg_pbi_version = var.esg_pbi_version
   vat_version     = var.vat_version
   keycloak_version = var.keycloak_version
   audit_version = var.audit_version

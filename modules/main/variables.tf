@@ -50,13 +50,17 @@ variable "esg_version" {
   description = "version of esg to deploy"
 }
 
+variable "esg_pbi_version" {
+  description = "version of esg pbi to deploy"
+  default = "2025.02.1"
+}
+
 variable "vat_version" {
   description = "version of esg to deploy"
 }
 
 variable "keycloak_version" {
   default     = "1.0.0"
-  
 }
 
 variable "audit_version" {

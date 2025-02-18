@@ -10,3 +10,16 @@ output "esg_reporting_api" {
 output "rabbitmq_name" {
   value = var.rabbitmq_host
 }
+output "pbi_exporter_access_key" {
+  value = nonsensitive(
+    substr(data.azurerm_storage_account_sas.pbi_data_access_key.sas, 0, 1) == "?" ?
+    substr(data.azurerm_storage_account_sas.pbi_data_access_key.sas, 1, length(data.azurerm_storage_account_sas.pbi_data_access_key.sas) - 1) :
+    data.azurerm_storage_account_sas.pbi_data_access_key.sas
+  )
+  sensitive = false
+}
+
+
+output "pbi_container_url" {
+  value = "https://${(azurerm_storage_account.storage.name)}.blob.core.windows.net/${azurerm_storage_container.pbi.name}"
+}

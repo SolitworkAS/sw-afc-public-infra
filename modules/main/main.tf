@@ -84,9 +84,12 @@ module "esg" {
   source              = "../apps/esg"
   customer            = var.customer
   esg_version         = var.esg_version
+  esg_pbi_version     =   var.esg_pbi_version
   location            = var.location
   resource_group_name = local.resource_group_name
   resource_group_id   = module.environment.resource_group_id
+  initial_username = var.app_admin_email
+  initial_password = var.app_admin_initial_password
 
   container_app_environment_id = module.environment.container_app_environment_id
 

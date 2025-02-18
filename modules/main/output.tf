@@ -26,3 +26,10 @@ output "user_management_url" {
 output "vat_api_url" {
   value = var.include_vat ? module.vat[0].vat_api_url : ""
 }
+output "pbi_data_access_key" {
+  value = nonsensitive(var.include_esg ? module.esg[0].pbi_exporter_access_key : "")
+}
+
+output "pbi_container_url" {
+  value = var.include_esg ? module.esg[0].pbi_container_url : ""
+}

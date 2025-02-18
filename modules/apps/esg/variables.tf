@@ -10,6 +10,10 @@ variable "customer" {
 variable "esg_version" {
   description = "version of esg to deploy"
 }
+
+variable "esg_pbi_version" {
+  description = "version of esg pbi to deploy"
+}
 variable "container_app_environment_id" {
   description = "id of the container app environment, must be a valid Azure resource id"
 }
@@ -265,4 +269,13 @@ variable "posthogkey" {
 variable "posthoghost" {
   description = "PostHog host"
   default = "https://eu.i.posthog.com"
+}
+
+variable "initial_username" {
+  description = "Initial username for the application"
+}
+
+variable "initial_password" {
+  description = "Initial password for the application"
+  sensitive = true
 }
