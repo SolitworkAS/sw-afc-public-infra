@@ -2289,7 +2289,7 @@ resource "azapi_resource" "esg-pbi-exporter" {
           }
         ]
         replicaRetryLimit = 1
-        replicaTimeout = 180
+        replicaTimeout = 1800
         scheduleTriggerConfig = {
           cronExpression = "0 * * * *"
           parallelism = 1
@@ -2364,15 +2364,15 @@ resource "azapi_resource" "esg-pbi-exporter" {
           },
           {
             name  = "LOAD_SIZE"
-            value = "10000"
+            value = "1000"
           },
           {
             name  = "LOAD_THREADS"
-            value = "5"
+            value = "2"
           },
           {
             name  = "RECORDS_PER_FILE"
-            value = "100000"
+            value = "10000"
           }
                 ]
           }

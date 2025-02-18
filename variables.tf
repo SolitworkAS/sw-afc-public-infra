@@ -50,7 +50,7 @@ variable "esg_version" {
 
 variable "esg_pbi_version" {
   description = "version of esg pbi to deploy"
-  default = "2025.02.1"
+  default = "2025.02.2"
 }
 
 variable "vat_version" {
