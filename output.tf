@@ -22,7 +22,7 @@ output "esg_organization_api" {
 output "esg_reporting_api" {
   value = module.main.esg_reporting_api
 }
-output "pbi_data_access_key" {
+output "sas_token" {
   value = nonsensitive(module.main.pbi_data_access_key)
 }
 output "pbi_container_url" {

@@ -10,7 +10,7 @@ output "esg_reporting_api" {
 output "rabbitmq_name" {
   value = var.rabbitmq_host
 }
-output "pbi_exporter_access_key" {
+output "sas_token" {
   value = nonsensitive(
     substr(data.azurerm_storage_account_sas.pbi_data_access_key.sas, 0, 1) == "?" ?
     substr(data.azurerm_storage_account_sas.pbi_data_access_key.sas, 1, length(data.azurerm_storage_account_sas.pbi_data_access_key.sas) - 1) :

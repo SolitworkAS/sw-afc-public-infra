@@ -35,7 +35,7 @@ locals {
 
   esg_pbi_exporter_name  = "esg-pbi-exporter"
   esg_pbi_exporter_image = "${var.container_registry}/images/esg/esg-pbi-exporter:${var.esg_pbi_version}"
-  storage = "${var.customer}pbiswstorage"
+  storage = "${var.customer}pbistg"
 
 
 
@@ -2225,9 +2225,6 @@ resource "azurerm_storage_account" "storage" {
     retention_policy {
       days = 30
     }
-  }
-  lifecycle { 
-  prevent_destroy = true
   }
 }
 
