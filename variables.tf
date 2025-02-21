@@ -40,12 +40,12 @@ variable "realm_name" {
 
 variable "carbacc_version" {
   description = "version of carbacc to deploy"
-  default = "2025.02.2"
+  default = "2025.02.3"
 }
 
 variable "esg_version" {
   description = "version of esg to deploy"
-  default = "2025.02.2"
+  default = "2025.02.3"
 }
 
 variable "esg_pbi_version" {
