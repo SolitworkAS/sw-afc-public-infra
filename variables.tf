@@ -45,7 +45,7 @@ variable "carbacc_version" {
 
 variable "esg_version" {
   description = "version of esg to deploy"
-  default = "2025.02.3"
+  default = "2025.02.4"
 }
 
 variable "esg_pbi_version" {
