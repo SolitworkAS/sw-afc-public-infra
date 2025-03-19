@@ -2294,10 +2294,6 @@ resource "azapi_resource" "esg-pbi-exporter" {
         }
        secrets = [
           {
-            name = "databasepassword"
-            value = var.database_password
-          },
-          {
             name = "containerregistrypassword"
             value = var.container_registry_password
           },
@@ -2345,11 +2341,11 @@ resource "azapi_resource" "esg-pbi-exporter" {
           },
           {
             name  = "USERNAME"
-            value = var.initial_username
+            value = "reporting@solitwork.com"
           },
           {
             name  = "PASSWORD"
-            value = var.initial_password
+            secretRef = "reportingpassword"
           },
           {
             name  = "LOAD_FROM_DATE"
