@@ -225,31 +225,6 @@ variable "default_domain"{
   description = "default domain"
 }
 
-# SMTP VARIABLES
-variable "smtp_host" {
-  description = "SMTP host"
-}
-variable "smtp_port" {
-  description = "SMTP port, must be a number"
-  validation {
-    condition     = can(regex("^[0-9]+$", var.smtp_port))
-    error_message = "SMTP port must be a number"
-  }
-}
-variable "smtp_username" {
-  description = "SMTP username"
-}
-variable "smtp_password" {
-  description = "SMTP password"
-  sensitive   = true
-}
-variable "smtp_from" {
-  description = "SMTP from address, must be a valid email address"
-  validation {
-    condition     = can(regex("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$", var.smtp_from))
-    error_message = "SMTP from address must be a valid email address"
-  }
-}
 variable "min_cpu" {
   description = "minimum cpu"
 }

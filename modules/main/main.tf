@@ -127,12 +127,6 @@ module "esg" {
   default_domain = module.environment.default_domain
   carbacc_frontend_url = var.include_carbacc ? var.use_proxy? "https://${var.customer}.${var.proxy_domain}/carbacc" : "https://carbacc-frontend-service.${module.environment.default_domain}" : ""
 
-  smtp_host     = var.smtp_host
-  smtp_port     = var.smtp_port
-  smtp_username = var.smtp_username
-  smtp_password = var.smtp_password
-  smtp_from     = var.smtp_from
-
   carbacc_included = var.include_carbacc
   env_domain =  module.environment.default_domain
 
