@@ -8,12 +8,6 @@ variable "include_esg" {
   default     = false
 }
 
-variable "include_carbacc" {
-  description = "Include CARBACC"
-  default     = false
-}
-
-
 # GENERAL VARIABLES
 variable "location" {
   default     = "northeurope"
@@ -38,32 +32,27 @@ variable "realm_name" {
   default     = ""
 }
 
-variable "carbacc_version" {
-  description = "version of carbacc to deploy"
-  default = "2025.04.1"
-}
-
 variable "esg_version" {
   description = "version of esg to deploy"
-  default = "2025.04.2"
+  default     = "2025.04.3"
 }
 
 variable "esg_pbi_version" {
   description = "version of esg pbi to deploy"
-  default = "2025.02.2"
+  default     = "2025.02.2"
 }
 
 variable "vat_version" {
   description = "version of esg to deploy"
-  default = "2024.12.3"
+  default     = "2024.12.3"
 }
 
 variable "keycloak_version" {
-  default     = "1.0.0"
+  default = "1.0.0"
 }
 
 variable "audit_version" {
-  default     = "1.0.3"
+  default = "1.0.3"
 }
 
 variable "use_proxy" {
@@ -72,7 +61,7 @@ variable "use_proxy" {
 }
 
 variable "proxy_domain" {
-  default = "afcsoftware.com"
+  default     = "afcsoftware.com"
   description = "Star domain used by the proxy Eg. afcsoftware.com for customer1.afcsoftware.com"
 }
 
@@ -155,7 +144,7 @@ variable "reportingpassword" {
 }
 
 variable "availability_zone" {
-  default = "1"
+  default     = "1"
   description = "availability zone"
 }
 
@@ -246,35 +235,36 @@ variable "app_admin_last_name" {
 }
 
 variable "storage_quota" {
-  default = 100
+  default     = 100
   description = "storage quota in GB, must be a number"
   validation {
-    condition = can(regex("^[0-9]+$", var.storage_quota))
+    condition     = can(regex("^[0-9]+$", var.storage_quota))
     error_message = "storage_quota must be a number"
   }
 }
 variable "storage_access_tier" {
-  default = "Hot"
+  default     = "Hot"
   description = "storage access tier, must be a valid Azure storage access tier"
   validation {
-    condition = can(regex("^(Hot|Cool)$", var.storage_access_tier))
+    condition     = can(regex("^(Hot|Cool)$", var.storage_access_tier))
     error_message = "storage_access_tier must be a valid Azure storage access tier"
   }
 }
 
 variable "storage_account_name" {
   description = "storage account name, must be a valid Azure storage account name"
-  default = ""
+  default     = ""
 }
+
 # PostHog Variables
 variable "posthogkey" {
   description = "PostHog key"
-  default = "phc_PTj5SVMlbPhTxHuOj2A5139u77nj6kZXlUraTH5MqXs"
-  sensitive = true
+  default     = "phc_PTj5SVMlbPhTxHuOj2A5139u77nj6kZXlUraTH5MqXs"
+  sensitive   = true
 }
 variable "posthoghost" {
   description = "PostHog host"
-  default = "https://eu.i.posthog.com"
+  default     = "https://eu.i.posthog.com"
 }
 
 

@@ -64,7 +64,6 @@ No resources.
 | Name | Description |
 |------|-------------|
 | <a name="output_api_url"></a> [api\_url](#output\_api\_url) | n/a |
-| <a name="output_carbacc_frontend_url"></a> [carbacc\_frontend\_url](#output\_carbacc\_frontend\_url) | n/a |
 | <a name="output_esg_frontend_url"></a> [esg\_frontend\_url](#output\_esg\_frontend\_url) | n/a |
 | <a name="output_user_management_url"></a> [user\_management\_url](#output\_user\_management\_url) | n/a |
 | <a name="output_vat_frontend_url"></a> [vat\_frontend\_url](#output\_vat\_frontend\_url) | n/a |

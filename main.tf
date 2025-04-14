@@ -19,39 +19,37 @@ module "main" {
   container_registry_username = var.container_registry_username
   container_registry_password = var.container_registry_password
 
-  min_cpu = var.min_cpu
+  min_cpu    = var.min_cpu
   min_memory = var.min_memory
 
   app_admin_email            = var.app_admin_email
   app_admin_first_name       = var.app_admin_first_name
   app_admin_last_name        = var.app_admin_last_name
   app_admin_initial_password = var.app_admin_initial_password
-  storage_access_tier = var.storage_access_tier
-  storage_quota = var.storage_quota
-  storage_account_name = var.storage_account_name
+  storage_access_tier        = var.storage_access_tier
+  storage_quota              = var.storage_quota
+  storage_account_name       = var.storage_account_name
 
 
   location         = var.location
   database_sku     = var.database_sku
   database_storage = var.database_storage
 
-  carbacc_version = var.carbacc_version
-  esg_version     = var.esg_version
-  esg_pbi_version = var.esg_pbi_version
-  vat_version     = var.vat_version
+  esg_version      = var.esg_version
+  esg_pbi_version  = var.esg_pbi_version
+  vat_version      = var.vat_version
   keycloak_version = var.keycloak_version
-  audit_version = var.audit_version
+  audit_version    = var.audit_version
 
   min_replicas = var.min_replicas
   max_replicas = var.max_replicas
 
-  include_vat     = var.include_vat
-  include_esg     = var.include_esg
-  include_carbacc = var.include_carbacc
+  include_vat = var.include_vat
+  include_esg = var.include_esg
 
-  use_proxy = var.use_proxy
+  use_proxy    = var.use_proxy
   proxy_domain = var.proxy_domain
-  
-  posthogkey = var.posthogkey
+
+  posthogkey  = var.posthogkey
   posthoghost = var.posthoghost
 }

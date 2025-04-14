@@ -61,10 +61,6 @@ variable "esg_frontend_url" {
   description = "ESG frontend URL"
 }
 
-variable "carbacc_frontend_url" {
-  description = "ESG frontend URL"
-}
-
 
 #APPLICATION ADMIN VARIABLES
 variable "app_admin_email" {

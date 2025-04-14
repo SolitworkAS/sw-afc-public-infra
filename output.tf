@@ -1,6 +1,3 @@
-output "carbacc_frontend_url" {
-  value = module.main.carbacc_frontend_url
-}
 output "esg_frontend_url" {
   value = module.main.esg_frontend_url
 }

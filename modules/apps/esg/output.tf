@@ -19,7 +19,6 @@ output "sas_token" {
   sensitive = false
 }
 
-
 output "pbi_container_url" {
   value = "https://${(azurerm_storage_account.storage.name)}.blob.core.windows.net/${azurerm_storage_container.pbi.name}"
 }

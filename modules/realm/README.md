@@ -70,7 +70,6 @@ No modules.
 | <a name="input_app_admin_first_name"></a> [app\_admin\_first\_name](#input\_app\_admin\_first\_name) | Application admin first name | `any` | n/a | yes |
 | <a name="input_app_admin_initial_password"></a> [app\_admin\_initial\_password](#input\_app\_admin\_initial\_password) | Application admin initial password, must be at least 8 characters long | `any` | n/a | yes |
 | <a name="input_app_admin_last_name"></a> [app\_admin\_last\_name](#input\_app\_admin\_last\_name) | Application admin last name | `any` | n/a | yes |
-| <a name="input_carbacc_frontend_url"></a> [carbacc\_frontend\_url](#input\_carbacc\_frontend\_url) | ESG frontend URL | `any` | n/a | yes |
 | <a name="input_email_theme"></a> [email\_theme](#input\_email\_theme) | Keycloak email theme | `string` | `"solitwork"` | no |
 | <a name="input_esg_frontend_url"></a> [esg\_frontend\_url](#input\_esg\_frontend\_url) | ESG frontend URL | `any` | n/a | yes |
 | <a name="input_keycloak_admin_password"></a> [keycloak\_admin\_password](#input\_keycloak\_admin\_password) | password for Keycloak admin user, must be at least 8 characters long | `any` | n/a | yes |

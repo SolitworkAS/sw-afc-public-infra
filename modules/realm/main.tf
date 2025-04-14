@@ -490,7 +490,7 @@ resource "keycloak_openid_client" "carbacc" {
 
   access_type         = "PUBLIC"
   valid_redirect_uris = [
-    "${var.carbacc_frontend_url}/*",
+    "${var.esg_frontend_url}/*",
     "https://${var.realm_name}.afcdemo.com/*",
     "https://${var.realm_name}.afcsoftware.com/*",
     "http://localhost*",

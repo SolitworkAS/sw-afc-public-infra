@@ -23,9 +23,9 @@ provider "azurerm" {
 }
 
 provider "keycloak" {
-  client_id = "admin-cli"
-  username  = var.keycloak_admin_user
-  password  = var.keycloak_admin_password
-  url = "https://keycloak.${module.main.env_domain}"
+  client_id     = "admin-cli"
+  username      = var.keycloak_admin_user
+  password      = var.keycloak_admin_password
+  url           = "https://keycloak.${module.main.env_domain}"
   initial_login = false
 }

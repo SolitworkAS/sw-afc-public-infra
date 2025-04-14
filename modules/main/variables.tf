@@ -1,16 +1,11 @@
 variable "include_vat" {
   description = "Include VAT"
-  default = false
+  default     = false
 }
 
 variable "include_esg" {
   description = "Include ESG"
-  default = false
-}
-
-variable "include_carbacc" {
-  description = "Include CARBACC"
-  default = false
+  default     = false
 }
 
 variable "use_proxy" {
@@ -19,7 +14,7 @@ variable "use_proxy" {
 }
 
 variable "proxy_domain" {
-  default = "afcsoftware.com"
+  default     = "afcsoftware.com"
   description = "Star domain used by the proxy Eg. afcsoftware.com for customer1.afcsoftware.com"
 }
 
@@ -42,17 +37,13 @@ variable "customer" {
   }
 }
 
-variable "carbacc_version" {
-  description = "version of carbacc to deploy"
-}
-
 variable "esg_version" {
-  description = "version of esg to deploy"
+  description = "version of esg and carbacc to deploy"
 }
 
 variable "esg_pbi_version" {
   description = "version of esg pbi to deploy"
-  default = "2025.02.1"
+  default     = "2025.02.1"
 }
 
 variable "vat_version" {
@@ -60,11 +51,11 @@ variable "vat_version" {
 }
 
 variable "keycloak_version" {
-  default     = "1.0.0"
+  default = "1.0.0"
 }
 
 variable "audit_version" {
-  default     = "1.0.0"
+  default = "1.0.0"
 }
 # CONTAINER REGISTRY VARIABLES
 variable "container_registry" {
@@ -98,10 +89,6 @@ variable "database_sku" {
 variable "database_storage" {
   default     = "32768"
   description = "database storage in MB, must be a valid Azure database storage size"
-  validation {
-    condition     = can(regex("^(32768|65536|131072|262144|524288|1048576|2097152|4193280|4194304|8388608|16777216|33553408)$", var.database_storage))
-    error_message = "database_storage must be a valid Azure database storage size"
-  }
 }
 
 variable "database_user" {
@@ -109,7 +96,7 @@ variable "database_user" {
   description = "database admin user, must only contain lowercase letters and numbers"
   validation {
     condition     = can(regex("^[a-z0-9]+$", var.database_user))
-    error_message = "dbuser must only contain lowercase letters and numbers"
+    error_message = "database_user must only contain lowercase letters and numbers"
   }
 }
 
@@ -118,31 +105,17 @@ variable "database_password" {
   sensitive   = true
   validation {
     condition     = can(regex("^.{8,}$", var.database_password))
-    error_message = "dbpassword must be at least 8 characters long"
+    error_message = "database_password must be at least 8 characters long"
   }
 }
 
 # RABBITMQ VARIABLES
-variable "rabbitmq_image" {
-  default     = "rabbitmq:3.12.6"
-  description = "docker image for rabbitmq"
-}
-
 variable "rabbitmq_user" {
   default     = "rabbitmq"
   description = "RabbitMQ default user, must only contain lowercase letters and numbers"
   validation {
     condition     = can(regex("^[a-z0-9]+$", var.rabbitmq_user))
     error_message = "rabbitmq_user must only contain lowercase letters and numbers"
-  }
-}
-
-variable "availability_zone" {
-  default     = "1"
-  description = "availability zone, must be a valid Azure availability zone"
-  validation {
-    condition     = can(regex("^(1|2|3)$", var.availability_zone))
-    error_message = "availability_zone must be a valid Azure availability zone"
   }
 }
 
@@ -155,15 +128,10 @@ variable "rabbitmq_password" {
   }
 }
 
-variable "reportingpassword" {
-  description = "password for reporting user, must be at least 8 characters long"
-  sensitive   = true
-  validation {
-    condition     = can(regex("^.{8,}$", var.reportingpassword))
-    error_message = "email must be at least 8 characters long"
-  }
+variable "rabbitmq_image" {
+  default     = "rabbitmq:3.12.6"
+  description = "docker image for rabbitmq"
 }
-
 
 # KEYCLOAK VARIABLES
 variable "keycloak_admin_user" {
@@ -184,6 +152,7 @@ variable "keycloak_admin_password" {
   }
 }
 
+
 # SCALING VARIABLES
 variable "min_replicas" {
   default     = 0
@@ -193,6 +162,7 @@ variable "min_replicas" {
     error_message = "min_replicas must be a number"
   }
 }
+
 variable "max_replicas" {
   default     = 10
   description = "maximum number of replicas, must be a number"
@@ -202,21 +172,35 @@ variable "max_replicas" {
   }
 }
 
-# Container Variables
-
-variable "min_cpu" {
-  description = "minimum cpu"
+# STORAGE VARIABLES
+variable "storage_account_name" {
+  description = "storage account name, must be a valid Azure storage account name"
+  default     = ""
 }
 
-variable "min_memory" {
-  description = "minimum memory"
+variable "storage_access_tier" {
+  default     = "Hot"
+  description = "storage access tier, must be a valid Azure storage access tier"
 }
 
+variable "storage_quota" {
+  default     = 100
+  description = "storage quota in GB, must be a number"
+  validation {
+    condition     = can(regex("^[0-9]+$", var.storage_quota))
+    error_message = "storage_quota must be a number"
+  }
+}
 
 # SMTP VARIABLES
 variable "smtp_host" {
   description = "SMTP host"
+  validation {
+    condition     = can(regex("^.{1,}$", var.smtp_host))
+    error_message = "SMTP host must not be empty"
+  }
 }
+
 variable "smtp_port" {
   description = "SMTP port, must be a number"
   validation {
@@ -224,13 +208,24 @@ variable "smtp_port" {
     error_message = "SMTP port must be a number"
   }
 }
+
 variable "smtp_username" {
   description = "SMTP username"
+  validation {
+    condition     = can(regex("^.{1,}$", var.smtp_username))
+    error_message = "SMTP username must not be empty"
+  }
 }
+
 variable "smtp_password" {
   description = "SMTP password"
   sensitive   = true
+  validation {
+    condition     = can(regex("^.{8,}$", var.smtp_password))
+    error_message = "SMTP password must be at least 8 characters long"
+  }
 }
+
 variable "smtp_from" {
   description = "SMTP from address, must be a valid email address"
   validation {
@@ -239,61 +234,73 @@ variable "smtp_from" {
   }
 }
 
-#APPLICATION ADMIN VARIABLES
+# APPLICATION ADMIN VARIABLES
 variable "app_admin_email" {
   description = "Application admin email, must be a valid email address"
   validation {
     condition     = can(regex("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$", var.app_admin_email))
-    error_message = "Application admin email must be a valid email address"
+    error_message = "app_admin_email must be a valid email address"
   }
 }
 
 variable "app_admin_initial_password" {
   description = "Application admin initial password, must be at least 8 characters long"
+  sensitive   = true
   validation {
     condition     = can(regex("^.{8,}$", var.app_admin_initial_password))
-    error_message = "Application admin initial password must be at least 8 characters long"
+    error_message = "app_admin_initial_password must be at least 8 characters long"
   }
 }
 
 variable "app_admin_first_name" {
   description = "Application admin first name"
+  validation {
+    condition     = can(regex("^.{1,}$", var.app_admin_first_name))
+    error_message = "app_admin_first_name must not be empty"
+  }
 }
 
 variable "app_admin_last_name" {
   description = "Application admin last name"
-}
-
-variable "storage_quota" {
-  default = 100
-  description = "storage quota in GB, must be a number"
   validation {
-    condition = can(regex("^[0-9]+$", var.storage_quota))
-    error_message = "storage_quota must be a number"
-  }
-}
-variable "storage_access_tier" {
-  default = "Hot"
-  description = "storage access tier, must be a valid Azure storage access tier"
-  validation {
-    condition = can(regex("^(Hot|Cool)$", var.storage_access_tier))
-    error_message = "storage_access_tier must be a valid Azure storage access tier"
+    condition     = can(regex("^.{1,}$", var.app_admin_last_name))
+    error_message = "app_admin_last_name must not be empty"
   }
 }
 
-variable "storage_account_name" {
-  description = "storage account name"
-  default = ""
+# REPORTING VARIABLES
+variable "reportingpassword" {
+  description = "password for reporting user, must be at least 8 characters long"
+  sensitive   = true
+  validation {
+    condition     = can(regex("^.{8,}$", var.reportingpassword))
+    error_message = "reportingpassword must be at least 8 characters long"
+  }
 }
 
-# PostHog Variables
+# POSTHOG VARIABLES
 variable "posthogkey" {
-  description = "PostHog api key"
-  sensitive = true
+  description = "PostHog api token"
+  sensitive   = true
 }
+
 variable "posthoghost" {
   description = "PostHog host"
-  default = "https://eu.i.posthog.com"
+  default     = "https://eu.i.posthog.com"
 }
+
+# RESOURCE VARIABLES
+variable "min_cpu" {
+  description = "minimum cpu"
+}
+
+variable "min_memory" {
+  description = "minimum memory"
+}
+
+variable "availability_zone" {
+  description = "availability zone"
+}
+
 
 
