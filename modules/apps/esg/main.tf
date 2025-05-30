@@ -1998,7 +1998,7 @@ resource "azapi_resource" "esg-pbi-exporter" {
         replicaRetryLimit = 1
         replicaTimeout    = 1800
         scheduleTriggerConfig = {
-          cronExpression         = "0 * * * *"
+          cronExpression         = "50 * * * *"
           parallelism            = 1
           replicaCompletionCount = 1
         }
