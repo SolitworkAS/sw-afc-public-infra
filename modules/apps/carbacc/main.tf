@@ -220,6 +220,10 @@ resource "azapi_resource" "carbacc_sourceload_service" {
           {
             name  = "containerregistrypassword"
             value = var.container_registry_password
+          },
+          {
+            name  = "reportingpassword"
+            value = var.reportingpassword
           }
         ]
         registries = [
@@ -311,6 +315,18 @@ resource "azapi_resource" "carbacc_sourceload_service" {
               {
                 name  = "KC_AUDIENCE"
                 value = var.keycloak_client_id
+              },
+              {
+                name  = "TASKMANAGEMENT_BASE_URL"
+                value = "https://carbacc-taskmanagement-service.${var.default_domain}"
+              },
+              {
+                name  = "SYSTEM_USER"
+                value = "reporting@solitwork.com"
+              },
+              {
+                name  = "SYSTEM_PASSWORD"
+                secretRef = "reportingpassword"
               }
             ]
             volumeMounts = [

@@ -2050,7 +2050,7 @@ resource "azapi_resource" "esg-pbi-exporter" {
                 value = azurerm_storage_account.storage.primary_access_key
               },
               {
-                name  = "USERNAME"
+                name  = "EMAIL"
                 value = "reporting@solitwork.com"
               },
               {
