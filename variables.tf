@@ -34,7 +34,7 @@ variable "realm_name" {
 
 variable "esg_version" {
   description = "version of esg to deploy"
-  default     = "2025.06.1"
+  default     = "2025.06.2"
 }
 
 variable "esg_pbi_version" {
