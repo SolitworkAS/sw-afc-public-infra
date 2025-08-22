@@ -1,3 +1,4 @@
+
 # 1. Deployment
 
 ## 1.1 Pre-requisites
@@ -141,7 +142,7 @@ Follow these steps to deploy updates:
 
 ## 1.5 URL Descriptions
 
-After deployment, Terraform provides several URLs crucial for accessing and managing the deployed products. Below is a detailed description of each URL along with the access requirements:
+After deployment, Terraform provides several URLs crucial for accessing and managing the deployed products. Below is a detailed description of each URL along with the access requirements. It is especially important to save the `pbi_container_url` and `sas_token`, if Power BI dashboard has to be set up as well.
 
 | URL                         | Description                                                                                               | Access                                                                                                   |
 |-----------------------------|-----------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
@@ -149,9 +150,11 @@ After deployment, Terraform provides several URLs crucial for accessing and mana
 | `esg_frontend_url`          | The user interface for ESG.                                                                               | Requires a user with at least the Respondent role. For initial access, use the Admin User details from `terraform.tfvars`. |
 | `esg_organization_api`      | API interface for setting up organizations and departments in ESG. Access documentation at `/docs`.                                        | Requires a user created through the ESG user interface with Admin role.                                |
 | `esg_reporting_api`         | API interface for obtaining ESG data for reporting purposes. Access documentation at `/docs`.                                             | Requires a user created through the ESG user interface with the Admin role.                                |
-| `keycloak_url`              | The Keycloak server for setting up Single Sign-On (SSO) integration.                                      | Log in with the username `admin` and the admin password set in `terraform.tfvars`. Guide available in `sw-afc-public-infra/guides/sso-setup/README.md`.          |
-| `vat_api_url`               | API interface for VAT.                                                                                    |                                                                                                          |
-| `vat_frontend_url`          | The user interface for VAT.                                                                               |                                                                                                          |
+| `keycloak_url`              | The Keycloak server for setting up Single Sign-On (SSO) integration.                                      | Log in with the username `admin` and the admin password set in `terraform.tfvars`. Guide available in `sw-afc-public-infra/guides/sso-setup/README.md`.
+|`pbi_container_url`|URL for the storage account to setup Power BI. The guide to do so can be found [here](https://github.com/SolitworkAS/sw-afc-public-powerbi)|Access it gained through the SAS Token |
+|`sas_token`| SAS Token for the PBI Container - gives a report access| Can also be generated manually in Azure afterwards|
+| `vat_api_url`               | API interface for VAT                                                                                    |                                                                                                          |
+| `vat_frontend_url`          | The user interface for VAT                                                                             |                                                                                                          |
 
 
 ## Frequently Asked Questions (FAQ)
